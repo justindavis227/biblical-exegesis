@@ -822,6 +822,7 @@ html[data-role="preview"] *,html[data-role="preview"] *::before,html[data-role="
       case 'black': black.classList.toggle('on', !!m.on); break;
       case 'mute': audio.muted = !!m.on; updateHud(); break;
       case 'hello': bus.send({ type: 'at', n: cur }); break;
+      case 'testclick': audio.click(0); audio.click(130); showHud(2500); break;
     }
   });
 
@@ -844,9 +845,9 @@ html[data-role="preview"] *,html[data-role="preview"] *::before,html[data-role="
         this.master = this.ctx.createGain();
         this.master.gain.value = 0.6;
         this.master.connect(this.ctx.destination);
-        if (this.ctx.state === 'suspended') this.ctx.resume();
         this.unlocked = true;
-      } catch (e) { /* no audio available */ }
+        const p = this.ctx.resume(); if (p && p.then) p.then(() => updateHud(), () => updateHud());
+      } catch (e) { this.lastError = String(e); }
       updateHud();
     },
     click(t = 0) {
@@ -856,7 +857,16 @@ html[data-role="preview"] *,html[data-role="preview"] *::before,html[data-role="
         return;
       }
       if (!this.ctx) return;
-      synthClick(this.ctx, this.master, this.ctx.currentTime + t / 1000 + Math.random() * 0.012);
+      try {
+        if (this.ctx.state !== 'running') this.ctx.resume();
+        synthClick(this.ctx, this.master, this.ctx.currentTime + t / 1000 + Math.random() * 0.012);
+      } catch (e) { this.lastError = String(e); updateHud(); }
+    },
+    state() {
+      if (QUIET) return 'off (mirror)';
+      if (!this.unlocked) return 'not armed';
+      if (this.lastError) return 'error: ' + this.lastError.slice(0, 40);
+      return this.muted ? 'muted' : (this.ctx && this.ctx.state === 'running' ? 'armed' : 'blocked (' + (this.ctx ? this.ctx.state : 'no ctx') + ')');
     },
   };
   // One phoropter detent: low mechanical thunk + metal tick + faint carrier ring. ~60ms.
@@ -867,18 +877,18 @@ html[data-role="preview"] *,html[data-role="preview"] *::before,html[data-role="
     o.frequency.exponentialRampToValueAtTime(70 * det, at + 0.05);
     g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(0.55, at + 0.003);
     g.gain.exponentialRampToValueAtTime(0.0001, at + 0.055);
-    o.connect(g).connect(dest); o.start(at); o.stop(at + 0.07);
+    o.connect(g); g.connect(dest); o.start(at); o.stop(at + 0.07);
     const len = Math.floor(c.sampleRate * 0.02), buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
     for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.2);
     const n = c.createBufferSource(), hp = c.createBiquadFilter(), ng = c.createGain();
     n.buffer = buf; hp.type = 'highpass'; hp.frequency.value = 2200;
     ng.gain.setValueAtTime(0.42, at); ng.gain.exponentialRampToValueAtTime(0.0001, at + 0.02);
-    n.connect(hp).connect(ng).connect(dest); n.start(at);
+    n.connect(hp); hp.connect(ng); ng.connect(dest); n.start(at);
     const r = c.createOscillator(), rg = c.createGain();
     r.type = 'sine'; r.frequency.value = 2600 * det;
     rg.gain.setValueAtTime(0.0001, at + 0.004); rg.gain.exponentialRampToValueAtTime(0.07, at + 0.006);
     rg.gain.exponentialRampToValueAtTime(0.0001, at + 0.04);
-    r.connect(rg).connect(dest); r.start(at); r.stop(at + 0.05);
+    r.connect(rg); rg.connect(dest); r.start(at); r.stop(at + 0.05);
   }
   window.__synthClick = synthClick; // exposed for the offline preview render
   // Optional recorded sample: drop assets/sfx/click.wav next to the deck and it replaces the synth.
@@ -894,8 +904,8 @@ html[data-role="preview"] *,html[data-role="preview"] *::before,html[data-role="
   function updateHud() {
     if (QUIET) return;
     const parts = [`<span class="k">${cur + 1}</span>/${slides.length}`, `<span>${labels[cur]}</span>`];
-    if (!audio.unlocked) parts.push('<span class="warn">press any key to arm sound</span>');
-    else if (audio.muted) parts.push('<span class="warn">muted</span>');
+    const st = audio.state();
+    parts.push(`<span class="${st === 'armed' ? 'k' : 'warn'}">sound: ${st}${st === 'not armed' ? ' — press any key' : ''}</span>`);
     if (timer.running) parts.push(`<span class="k">⏱ ${fmt(timer.remaining)}</span>`);
     if (AUDIENCE && !isFull()) parts.push('<span class="warn">F = fill this screen</span>');
     hud.innerHTML = parts.join('<span style="opacity:.35">·</span>');
@@ -1023,9 +1033,11 @@ html[data-role="preview"] *,html[data-role="preview"] *::before,html[data-role="
       case 'T': timerCmd('reset'); break;
       case 'P': if (SOLO) location.href = 'presenter.html#' + (cur + 1); break;
       case 'Escape': black.classList.remove('on'); bus.send({ type: 'black', on: false }); break;
+      case 's': case 'S': audio.click(0); audio.click(130); showHud(2500); break;
       case '?': showHud(6000); break;
     }
   });
+  ['pointerdown', 'touchend', 'keyup'].forEach(ev => document.addEventListener(ev, () => { if (!audio.unlocked) audio.unlock(); }, { capture: true }));
   if (SOLO) document.addEventListener('pointerdown', e => {
     if (!audio.unlocked) audio.unlock();
     if (e.target.closest('[data-timer]')) return;

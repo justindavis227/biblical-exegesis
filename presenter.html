@@ -78,7 +78,7 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
     </div>
   </main>
   <footer>
-    <span><kbd>→</kbd><kbd>space</kbd> next</span><span><kbd>←</kbd> back</span><span><kbd>B</kbd> black</span><span><kbd>M</kbd> mute clicks</span><span><kbd>t</kbd> timer</span><span><kbd>⇧T</kbd> reset timer</span><span><kbd>Home</kbd> first</span><span>Sound plays in the audience window only.</span>
+    <span><kbd>→</kbd><kbd>space</kbd> next</span><span><kbd>←</kbd> back</span><span><kbd>B</kbd> black</span><span><kbd>M</kbd> mute clicks</span><span><kbd>t</kbd> timer</span><span><kbd>⇧T</kbd> reset timer</span><span><kbd>Home</kbd> first</span><span><kbd>S</kbd> test click on TV</span><span>Sound plays in the audience window only.</span>
   </footer>
 </div>
 <div id="start">
@@ -198,6 +198,7 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
       case 't': timerCmd('toggle'); break;
       case 'T': timerCmd('reset'); break;
       case 'f': case 'F': { const el = document.documentElement; document.fullscreenElement ? document.exitFullscreen() : (el.requestFullscreen && el.requestFullscreen()); break; }
+      case 's': case 'S': post(audWin(), { type: 'testclick' }); break;
       case 'Escape': if (black) toggleBlack(); break;
     }
   });
