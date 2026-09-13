@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Better One, or Two? — Biblical Exegesis · RISE</title>
+<style>
+@font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-display:block;src:url('assets/fonts/archivo-latin-500-normal.woff2') format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:600;font-display:block;src:url('assets/fonts/archivo-latin-600-normal.woff2') format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:700;font-display:block;src:url('assets/fonts/archivo-latin-700-normal.woff2') format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:800;font-display:block;src:url('assets/fonts/archivo-latin-800-normal.woff2') format('woff2')}
+@font-face{font-family:'Source Serif 4';font-style:normal;font-weight:400;font-display:block;src:url('assets/fonts/source-serif-4-latin-400-normal.woff2') format('woff2')}
+@font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:block;src:url('assets/fonts/source-serif-4-latin-600-normal.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:block;src:url('assets/fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:700;font-display:block;src:url('assets/fonts/ibm-plex-mono-latin-700-normal.woff2') format('woff2')}
+@font-face{font-family:'Alfa Slab One';font-style:normal;font-weight:400;font-display:block;src:url('assets/fonts/alfa-slab-one-latin-400-normal.woff2') format('woff2')}
+
+:root{--t1:96px;--t2:56px;--body:40px;--small:34px;--mono:32px;--pad-x:160px;--pad-top:160px;--pad-bottom:120px;--gap-title:48px;--gap-item:28px}
+
+a{color:#0F7B86}a:hover{color:#0B5C66}
+@keyframes chartRow{0%{opacity:0;filter:blur(18px)}35%{opacity:1;filter:blur(14px)}100%{opacity:1;filter:blur(0)}}
+@keyframes lightOn{0%{filter:brightness(.15)}18%{filter:brightness(.9)}26%{filter:brightness(.25)}40%{filter:brightness(1.05)}55%{filter:brightness(.6)}70%{filter:brightness(1)}100%{filter:brightness(1)}}
+@keyframes flipFwd{0%{transform:rotateY(0deg)}100%{transform:rotateY(-180deg)}}
+@keyframes flipFwd2{0%{transform:rotateY(0deg);z-index:1}49%{z-index:1}50%{z-index:5}100%{transform:rotateY(-180deg);z-index:5}}
+@keyframes flipBack{0%{transform:rotateY(0deg)}100%{transform:rotateY(180deg)}}
+html,body{margin:0;height:100%;background:#0B0F10;overflow:hidden;-webkit-font-smoothing:antialiased}
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0B0F10}
+#stage{position:relative;width:1920px;height:1080px;transform-origin:center center;overflow:hidden;background:#0B0F10}
+#stage>section{position:absolute;inset:0;width:1920px;height:1080px;box-sizing:border-box}
+/* sections carry their own inline display (block/flex/grid) — hide with !important so inline styles are left intact */
+#stage>section:not(.on):not(.leaving){display:none!important}
+#stage>section.leaving{z-index:2;pointer-events:none;animation:deckFadeOut .4s ease forwards}
+@keyframes deckFadeOut{to{opacity:0}}
+#stage>section.entering{animation:deckFadeIn .4s ease both}
+@keyframes deckFadeIn{from{opacity:0}to{opacity:1}}
+
+/* black screen */
+#black{position:fixed;inset:0;background:#000;display:none;z-index:50}
+#black.on{display:block}
+
+/* counter / hint overlay */
+#hud{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);font:600 13px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;color:rgba(237,231,218,.85);background:rgba(17,21,22,.72);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:8px 14px;display:flex;gap:14px;align-items:center;letter-spacing:.04em;opacity:0;transition:opacity .25s;z-index:60;pointer-events:none;white-space:nowrap}
+#hud.show{opacity:1}
+#hud .k{color:#F2C21B}
+#hud .warn{color:#F2C21B}
+
+/* phoropter scene hooks (elements tagged at build time) */
+[data-rim]{will-change:transform}
+[data-chart]{will-change:filter}
+[data-lenslabel]{transition:opacity .32s ease,transform .32s ease}
+section.lens-enter [data-lenslabel]{opacity:0;transform:translateY(14px)}
+section.lens-enter.lens-go [data-lenslabel]{opacity:1;transform:translateY(0)}
+
+</style>
+</head>
+<body>
+<div id="viewport"><div id="stage">
+<section data-label="T-01" data-speaker-notes="Hold. No build. Lens photo (original letters) pushed right; title bottom-left on a tapered plate." style="background:#0E1314;color:#161412;font-family:Archivo,sans-serif;overflow:hidden">
+  <img src="assets/img/lens-letters.jpg" alt="Looking through a phoropter lens" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;transform:scale(1.18) translateX(120px);transform-origin:50% 45%">
+  <div style="position:absolute;left:0;bottom:100px;width:1020px;box-sizing:content-box;background:#F2C21B;padding:44px 60px 48px 80px;display:flex;flex-direction:column;gap:24px;clip-path:polygon(0 0,1020px 0,100% 100%,0 100%)">
+    <div style="font:700 32px 'IBM Plex Mono',monospace;color:#161412;letter-spacing:.18em">BIBLICAL EXEGESIS</div>
+    <h1 style="margin:0;font-family:'Alfa Slab One',serif;font-size:116px;font-weight:400;line-height:.95;letter-spacing:.01em;color:#161412;white-space:nowrap">BETTER ONE,<br>OR TWO?</h1>
+    <div style="display:flex;align-items:center;gap:28px;font:700 32px 'IBM Plex Mono',monospace;color:#161412;letter-spacing:.18em"><span>RISE</span><span>·</span><span>SEPT 17</span></div>
+  </div>
+</section>
+<section data-label="D-00a" data-speaker-notes="Still. Open bible, 2:5–11 marked." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;left:270px;top:70px;width:1380px;height:936px;perspective:2800px;perspective-origin:50% 50%">
+    <div style="position:absolute;inset:0;border-radius:8px;background:linear-gradient(135deg,#232628 0%,#141618 60%,#0D0F10 100%);box-shadow:0 50px 80px rgba(0,0,0,.65),inset 0 0 0 1px rgba(255,255,255,.06)"></div>
+    <div style="position:absolute;top:22px;width:662px;height:892px;left:26px;background:linear-gradient(to right,#F3F0E8 0%,#F6F3EC 88%,#E4E0D6 99%,#CFCABF 100%);border-radius:3px 0 0 3px;box-shadow:-3px 3px 0 #E9E5DB,-6px 6px 0 #DED9CE,-9px 9px 0 #D2CDC1"><div style="position:absolute;left:70px;top:38px;font:700 24px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#8A8378">PHILIPPIANS 2</div><div style="position:absolute;left:70px;top:86px;width:540px;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.42;color:#2A2622;text-wrap:pretty"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">2</sup>then make my joy complete by being like-minded, having the same love, being one in spirit and of one mind. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">3</sup>Do nothing out of selfish ambition or vain conceit. Rather, in humility value others above yourselves, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">4</sup>not looking to your own interests but each of you to the interests of the others. <span style="background:rgba(242,194,27,.55);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:2px 0"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">5</sup>In your relationships with one another, have the same mindset as Christ Jesus: </span><span style="background:rgba(242,194,27,.55);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:2px 0"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">6</sup>Who, being in very nature God, did not consider equality with God something to be used to his own advantage; </span><span style="background:rgba(242,194,27,.55);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:2px 0"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">7</sup>rather, he made himself nothing by taking the very nature of a servant, being made in human likeness. </span><span style="background:rgba(242,194,27,.55);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:2px 0"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">8</sup>And being found in appearance as a man, he humbled himself by becoming obedient to death — even death on a cross! </span></div></div>
+    <div style="position:absolute;top:22px;width:662px;height:892px;left:692px;background:linear-gradient(to left,#F3F0E8 0%,#F6F3EC 88%,#E4E0D6 99%,#CFCABF 100%);border-radius:0 3px 3px 0;box-shadow:3px 3px 0 #E9E5DB,6px 6px 0 #DED9CE,9px 9px 0 #D2CDC1"><div style="position:absolute;right:60px;top:38px;font:700 24px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#8A8378">PHILIPPIANS 2</div><div style="position:absolute;left:60px;top:86px;width:540px;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.42;color:#2A2622;text-wrap:pretty"><span style="background:rgba(242,194,27,.55);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:2px 0"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">9</sup>Therefore God exalted him to the highest place and gave him the name that is above every name, </span><span style="background:rgba(242,194,27,.55);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:2px 0"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">10</sup>that at the name of Jesus every knee should bow, in heaven and on earth and under the earth, </span><span style="background:rgba(242,194,27,.55);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:2px 0"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">11</sup>and every tongue acknowledge that Jesus Christ is Lord, to the glory of God the Father. </span><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">12</sup>Therefore, my dear friends, as you have always obeyed — not only in my presence, but now much more in my absence — continue to work out your salvation with fear and trembling, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">13</sup>for it is God who works in you to will and to act in order to fulfill his good purpose. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">14</sup>Do everything without grumbling or arguing, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">15</sup>so that you may become blameless and pure, “children of God without fault in a warped and crooked generation.” Then you will shine among them like stars in the sky </div></div>
+    <div style="position:absolute;top:22px;bottom:22px;left:600px;width:180px;background:linear-gradient(to right,rgba(0,0,0,0) 0%,rgba(0,0,0,.10) 44%,rgba(0,0,0,.28) 50%,rgba(0,0,0,.10) 56%,rgba(0,0,0,0) 100%);pointer-events:none"></div>
+  </div>
+</section>
+<section data-label="D-00a2" data-speaker-notes="One page turns back: 2:1–4 comes into view. What comes before?" style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;left:270px;top:70px;width:1380px;height:936px;perspective:2800px;perspective-origin:50% 50%">
+    <div style="position:absolute;inset:0;border-radius:8px;background:linear-gradient(135deg,#232628 0%,#141618 60%,#0D0F10 100%);box-shadow:0 50px 80px rgba(0,0,0,.65),inset 0 0 0 1px rgba(255,255,255,.06)"></div>
+    <div style="position:absolute;top:22px;width:662px;height:892px;left:26px;background:linear-gradient(to right,#F3F0E8 0%,#F6F3EC 88%,#E4E0D6 99%,#CFCABF 100%);border-radius:3px 0 0 3px;box-shadow:-3px 3px 0 #E9E5DB,-6px 6px 0 #DED9CE,-9px 9px 0 #D2CDC1"><div style="position:absolute;left:70px;top:38px;font:700 24px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#8A8378">PHILIPPIANS 1</div><div style="position:absolute;left:70px;top:86px;width:540px;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.42;color:#2A2622;text-wrap:pretty"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">24</sup>but it is more necessary for you that I remain in the body. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">25</sup>Convinced of this, I know that I will remain, and I will continue with all of you for your progress and joy in the faith, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">26</sup>so that through my being with you again your boasting in Christ Jesus will abound on account of me. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">27</sup>Whatever happens, conduct yourselves in a manner worthy of the gospel of Christ. Then, whether I come and see you or only hear about you in my absence, I will know that you stand firm in the one Spirit, striving together as one for the faith of the gospel <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">28</sup>without being frightened in any way by those who oppose you. This is a sign to them that they will be destroyed, but that you will be saved — and that by God. </div></div>
+    <div style="position:absolute;top:22px;width:662px;height:892px;left:692px;background:linear-gradient(to left,#F3F0E8 0%,#F6F3EC 88%,#E4E0D6 99%,#CFCABF 100%);border-radius:0 3px 3px 0;box-shadow:3px 3px 0 #E9E5DB,6px 6px 0 #DED9CE,9px 9px 0 #D2CDC1"><div style="position:absolute;right:60px;top:38px;font:700 24px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#8A8378">PHILIPPIANS 2</div><div style="position:absolute;left:60px;top:86px;width:540px;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.42;color:#2A2622;text-wrap:pretty"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">9</sup>Therefore God exalted him to the highest place and gave him the name that is above every name, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">10</sup>that at the name of Jesus every knee should bow, in heaven and on earth and under the earth, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">11</sup>and every tongue acknowledge that Jesus Christ is Lord, to the glory of God the Father. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">12</sup>Therefore, my dear friends, as you have always obeyed — not only in my presence, but now much more in my absence — continue to work out your salvation with fear and trembling, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">13</sup>for it is God who works in you to will and to act in order to fulfill his good purpose. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">14</sup>Do everything without grumbling or arguing, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">15</sup>so that you may become blameless and pure, “children of God without fault in a warped and crooked generation.” Then you will shine among them like stars in the sky </div></div>
+    <div style="position:absolute;top:22px;bottom:22px;left:600px;width:180px;background:linear-gradient(to right,rgba(0,0,0,0) 0%,rgba(0,0,0,.10) 44%,rgba(0,0,0,.28) 50%,rgba(0,0,0,.10) 56%,rgba(0,0,0,0) 100%);pointer-events:none"></div>
+    <div style="position:absolute;top:22px;width:662px;height:892px;left:26px;transform-origin:right center;z-index:3;transform-style:preserve-3d;animation-name:var(--anim-flipBackAnim,none);animation-duration:1.9s;animation-timing-function:cubic-bezier(.55,.05,.3,1);animation-delay:1s;animation-fill-mode:both">
+      <div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:linear-gradient(to right,#F3F0E8 0%,#F6F3EC 88%,#E4E0D6 99%,#CFCABF 100%);border-radius:3px 0 0 3px"><div style="position:absolute;left:70px;top:38px;font:700 24px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#8A8378">PHILIPPIANS 2</div><div style="position:absolute;left:70px;top:86px;width:540px;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.42;color:#2A2622;text-wrap:pretty"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">2</sup>then make my joy complete by being like-minded, having the same love, being one in spirit and of one mind. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">3</sup>Do nothing out of selfish ambition or vain conceit. Rather, in humility value others above yourselves, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">4</sup>not looking to your own interests but each of you to the interests of the others. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">5</sup>In your relationships with one another, have the same mindset as Christ Jesus: <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">6</sup>Who, being in very nature God, did not consider equality with God something to be used to his own advantage; <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">7</sup>rather, he made himself nothing by taking the very nature of a servant, being made in human likeness. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">8</sup>And being found in appearance as a man, he humbled himself by becoming obedient to death — even death on a cross! </div><div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(to left,rgba(0,0,0,.22) 0%,rgba(0,0,0,0) 14%)"></div></div>
+      <div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(180deg);background:linear-gradient(to left,#F3F0E8 0%,#F6F3EC 88%,#E4E0D6 99%,#CFCABF 100%);border-radius:0 3px 3px 0;box-shadow:0 0 40px rgba(0,0,0,.25)"><div style="position:absolute;right:60px;top:38px;font:700 24px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#8A8378">PHILIPPIANS 1–2</div><div style="position:absolute;left:60px;top:86px;width:540px;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.42;color:#2A2622;text-wrap:pretty"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">29</sup>For it has been granted to you on behalf of Christ not only to believe in him, but also to suffer for him, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">30</sup>since you are going through the same struggle you saw I had, and now hear that I still have. <span style="background:rgba(242,194,27,.55);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:2px 0"><span style="float:left;font-family:'Alfa Slab One',serif;font-size:64px;line-height:.85;margin:4px 14px 0 0;color:#161412">2</span>Therefore if you have any encouragement from being united with Christ, if any comfort from his love, if any common sharing in the Spirit, if any tenderness and compassion, </span><span style="background:rgba(242,194,27,.55);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:2px 0"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">2</sup>then make my joy complete by being like-minded, having the same love, being one in spirit and of one mind. </span><span style="background:rgba(242,194,27,.55);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:2px 0"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">3</sup>Do nothing out of selfish ambition or vain conceit. Rather, in humility value others above yourselves, </span><span style="background:rgba(242,194,27,.55);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:2px 0"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">4</sup>not looking to your own interests but each of you to the interests of the others. </span></div><div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(to right,rgba(0,0,0,.22) 0%,rgba(0,0,0,0) 14%)"></div></div>
+    </div>
+  </div>
+</section>
+<section data-label="D-00a3" data-speaker-notes="Two turns forward: past 5–11, landing on 2:12 — the therefore." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;left:270px;top:70px;width:1380px;height:936px;perspective:2800px;perspective-origin:50% 50%">
+    <div style="position:absolute;inset:0;border-radius:8px;background:linear-gradient(135deg,#232628 0%,#141618 60%,#0D0F10 100%);box-shadow:0 50px 80px rgba(0,0,0,.65),inset 0 0 0 1px rgba(255,255,255,.06)"></div>
+    <div style="position:absolute;top:22px;width:662px;height:892px;left:26px;background:linear-gradient(to right,#F3F0E8 0%,#F6F3EC 88%,#E4E0D6 99%,#CFCABF 100%);border-radius:3px 0 0 3px;box-shadow:-3px 3px 0 #E9E5DB,-6px 6px 0 #DED9CE,-9px 9px 0 #D2CDC1"><div style="position:absolute;left:70px;top:38px;font:700 24px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#8A8378">PHILIPPIANS 1</div><div style="position:absolute;left:70px;top:86px;width:540px;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.42;color:#2A2622;text-wrap:pretty"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">24</sup>but it is more necessary for you that I remain in the body. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">25</sup>Convinced of this, I know that I will remain, and I will continue with all of you for your progress and joy in the faith, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">26</sup>so that through my being with you again your boasting in Christ Jesus will abound on account of me. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">27</sup>Whatever happens, conduct yourselves in a manner worthy of the gospel of Christ. Then, whether I come and see you or only hear about you in my absence, I will know that you stand firm in the one Spirit, striving together as one for the faith of the gospel <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">28</sup>without being frightened in any way by those who oppose you. This is a sign to them that they will be destroyed, but that you will be saved — and that by God. </div></div>
+    <div style="position:absolute;top:22px;width:662px;height:892px;left:692px;background:linear-gradient(to left,#F3F0E8 0%,#F6F3EC 88%,#E4E0D6 99%,#CFCABF 100%);border-radius:0 3px 3px 0;box-shadow:3px 3px 0 #E9E5DB,6px 6px 0 #DED9CE,9px 9px 0 #D2CDC1"><div style="position:absolute;right:60px;top:38px;font:700 24px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#8A8378">PHILIPPIANS 2</div><div style="position:absolute;left:60px;top:86px;width:540px;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.42;color:#2A2622;text-wrap:pretty"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">18</sup>So you too should be glad and rejoice with me. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">19</sup>I hope in the Lord Jesus to send Timothy to you soon, that I also may be cheered when I receive news about you. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">20</sup>I have no one else like him, who will show genuine concern for your welfare. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">21</sup>For everyone looks out for their own interests, not those of Jesus Christ. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">22</sup>But you know that Timothy has proved himself, because as a son with his father he has served with me in the work of the gospel. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">23</sup>I hope, therefore, to send him as soon as I see how things go with me. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">24</sup>And I am confident in the Lord that I myself will come soon. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">25</sup>But I think it is necessary to send back to you Epaphroditus, my brother, co-worker and fellow soldier, who is also your messenger, whom you sent to take care of my needs. </div></div>
+    <div style="position:absolute;top:22px;bottom:22px;left:600px;width:180px;background:linear-gradient(to right,rgba(0,0,0,0) 0%,rgba(0,0,0,.10) 44%,rgba(0,0,0,.28) 50%,rgba(0,0,0,.10) 56%,rgba(0,0,0,0) 100%);pointer-events:none"></div>
+    <div style="position:absolute;top:22px;width:662px;height:892px;left:692px;transform-origin:left center;z-index:3;transform-style:preserve-3d;animation-name:var(--anim-flipFwdAnim,none);animation-duration:1.9s;animation-timing-function:cubic-bezier(.55,.05,.3,1);animation-delay:1s;animation-fill-mode:both">
+      <div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:linear-gradient(to left,#F3F0E8 0%,#F6F3EC 88%,#E4E0D6 99%,#CFCABF 100%);border-radius:0 3px 3px 0"><div style="position:absolute;right:60px;top:38px;font:700 24px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#8A8378">PHILIPPIANS 1–2</div><div style="position:absolute;left:60px;top:86px;width:540px;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.42;color:#2A2622;text-wrap:pretty"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">29</sup>For it has been granted to you on behalf of Christ not only to believe in him, but also to suffer for him, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">30</sup>since you are going through the same struggle you saw I had, and now hear that I still have. <span style="float:left;font-family:'Alfa Slab One',serif;font-size:64px;line-height:.85;margin:4px 14px 0 0;color:#161412">2</span>Therefore if you have any encouragement from being united with Christ, if any comfort from his love, if any common sharing in the Spirit, if any tenderness and compassion, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">2</sup>then make my joy complete by being like-minded, having the same love, being one in spirit and of one mind. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">3</sup>Do nothing out of selfish ambition or vain conceit. Rather, in humility value others above yourselves, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">4</sup>not looking to your own interests but each of you to the interests of the others. </div><div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(to right,rgba(0,0,0,.22) 0%,rgba(0,0,0,0) 14%)"></div></div>
+      <div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(180deg);background:linear-gradient(to right,#F3F0E8 0%,#F6F3EC 88%,#E4E0D6 99%,#CFCABF 100%);border-radius:3px 0 0 3px;box-shadow:0 0 40px rgba(0,0,0,.25)"><div style="position:absolute;left:70px;top:38px;font:700 24px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#8A8378">PHILIPPIANS 2</div><div style="position:absolute;left:70px;top:86px;width:540px;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.42;color:#2A2622;text-wrap:pretty"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">2</sup>then make my joy complete by being like-minded, having the same love, being one in spirit and of one mind. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">3</sup>Do nothing out of selfish ambition or vain conceit. Rather, in humility value others above yourselves, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">4</sup>not looking to your own interests but each of you to the interests of the others. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">5</sup>In your relationships with one another, have the same mindset as Christ Jesus: <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">6</sup>Who, being in very nature God, did not consider equality with God something to be used to his own advantage; <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">7</sup>rather, he made himself nothing by taking the very nature of a servant, being made in human likeness. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">8</sup>And being found in appearance as a man, he humbled himself by becoming obedient to death — even death on a cross! </div><div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(to left,rgba(0,0,0,.22) 0%,rgba(0,0,0,0) 14%)"></div></div>
+    </div>
+    <div style="position:absolute;top:22px;width:662px;height:892px;left:692px;transform-origin:left center;z-index:1;transform-style:preserve-3d;animation-name:var(--anim-flipFwd2Anim,none);animation-duration:1.9s;animation-timing-function:cubic-bezier(.55,.05,.3,1);animation-delay:3.2s;animation-fill-mode:both">
+      <div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:linear-gradient(to left,#F3F0E8 0%,#F6F3EC 88%,#E4E0D6 99%,#CFCABF 100%);border-radius:0 3px 3px 0"><div style="position:absolute;right:60px;top:38px;font:700 24px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#8A8378">PHILIPPIANS 2</div><div style="position:absolute;left:60px;top:86px;width:540px;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.42;color:#2A2622;text-wrap:pretty"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">9</sup>Therefore God exalted him to the highest place and gave him the name that is above every name, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">10</sup>that at the name of Jesus every knee should bow, in heaven and on earth and under the earth, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">11</sup>and every tongue acknowledge that Jesus Christ is Lord, to the glory of God the Father. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">12</sup>Therefore, my dear friends, as you have always obeyed — not only in my presence, but now much more in my absence — continue to work out your salvation with fear and trembling, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">13</sup>for it is God who works in you to will and to act in order to fulfill his good purpose. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">14</sup>Do everything without grumbling or arguing, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">15</sup>so that you may become blameless and pure, “children of God without fault in a warped and crooked generation.” Then you will shine among them like stars in the sky </div><div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(to right,rgba(0,0,0,.22) 0%,rgba(0,0,0,0) 14%)"></div></div>
+      <div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(180deg);background:linear-gradient(to right,#F3F0E8 0%,#F6F3EC 88%,#E4E0D6 99%,#CFCABF 100%);border-radius:3px 0 0 3px;box-shadow:0 0 40px rgba(0,0,0,.25)"><div style="position:absolute;left:70px;top:38px;font:700 24px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#8A8378">PHILIPPIANS 2</div><div style="position:absolute;left:70px;top:86px;width:540px;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.42;color:#2A2622;text-wrap:pretty"><span style="background:rgba(242,194,27,.55);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:2px 0"><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">12</sup>Therefore, my dear friends, as you have always obeyed — not only in my presence, but now much more in my absence — continue to work out your salvation with fear and trembling, </span><sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">13</sup>for it is God who works in you to will and to act in order to fulfill his good purpose. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">14</sup>Do everything without grumbling or arguing, <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">15</sup>so that you may become blameless and pure, “children of God without fault in a warped and crooked generation.” Then you will shine among them like stars in the sky <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">16</sup>as you hold firmly to the word of life. And then I will be able to boast on the day of Christ that I did not run or labor in vain. <sup style="font:700 .6em 'IBM Plex Mono',monospace;color:#8A8378;margin-right:.35em;vertical-align:top">17</sup>But even if I am being poured out like a drink offering on the sacrifice and service coming from your faith, I am glad and rejoice with all of you. </div><div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(to left,rgba(0,0,0,.22) 0%,rgba(0,0,0,0) 14%)"></div></div>
+    </div>
+  </div>
+</section>
+<section data-label="D-00b" data-speaker-notes="Bible partially in frame; passage sits on the dark ground, not on the book." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <img src="assets/img/bible-partial.jpg" alt="Open bible, partially in frame" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:100% 100%;filter:grayscale(1) contrast(1.05)">
+  <div style="position:absolute;inset:0;background:linear-gradient(to right,#111516 0%,#111516 42%,rgba(17,21,22,.7) 60%,rgba(17,21,22,0) 100%),linear-gradient(to bottom,#111516 0%,rgba(17,21,22,.9) 45%,rgba(17,21,22,0) 85%)"></div>
+  <div style="position:absolute;left:var(--pad-x);top:var(--pad-top);width:900px;display:flex;flex-direction:column;gap:32px">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">PHILIPPIANS 2:5–11</div>
+    <p style="margin:0;font-family:'Source Serif 4',serif;font-size:32px;line-height:1.42;color:#EDE7DA;text-wrap:pretty"><sup style="font:700 .5em 'IBM Plex Mono',monospace;color:#F2C21B;margin-right:.35em;vertical-align:top">5</sup>In your relationships with one another, have the same mindset as Christ Jesus: <sup style="font:700 .5em 'IBM Plex Mono',monospace;color:#F2C21B;margin-right:.35em;vertical-align:top">6</sup>Who, being in very nature God, did not consider equality with God something to be used to his own advantage; <sup style="font:700 .5em 'IBM Plex Mono',monospace;color:#F2C21B;margin-right:.35em;vertical-align:top">7</sup>rather, he made himself nothing by taking the very nature of a servant, being made in human likeness. <sup style="font:700 .5em 'IBM Plex Mono',monospace;color:#F2C21B;margin-right:.35em;vertical-align:top">8</sup>And being found in appearance as a man, he humbled himself by becoming obedient to death — even death on a cross! <sup style="font:700 .5em 'IBM Plex Mono',monospace;color:#F2C21B;margin-right:.35em;vertical-align:top">9</sup>Therefore God exalted him to the highest place and gave him the name that is above every name, <sup style="font:700 .5em 'IBM Plex Mono',monospace;color:#F2C21B;margin-right:.35em;vertical-align:top">10</sup>that at the name of Jesus every knee should bow, in heaven and on earth and under the earth, <sup style="font:700 .5em 'IBM Plex Mono',monospace;color:#F2C21B;margin-right:.35em;vertical-align:top">11</sup>and every tongue acknowledge that Jesus Christ is Lord, to the glory of God the Father.</p>
+  </div>
+</section>
+<section data-label="D-03" data-speaker-notes="Same grid, only 2:5–11 shown at full weight. Columns one and three held empty." style="background:#F4EFE6;color:#161412;font-family:Archivo,sans-serif;padding:120px var(--pad-x) 80px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:56px;align-content:start">
+  <div style="display:flex;flex-direction:column;gap:20px;min-width:0;visibility:hidden">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#161412;letter-spacing:.08em">PHILIPPIANS 2:1–4</div>
+    <p style="margin:0;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.3;color:#161412;text-wrap:pretty"><span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">1</span>Therefore if you have any encouragement from being united with Christ, if any comfort from his love, if any common sharing in the Spirit, if any tenderness and compassion, <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">2</span>then make my joy complete by being like-minded, having the same love, being one in spirit and of one mind. <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">3</span>Do nothing out of selfish ambition or vain conceit. Rather, in humility value others above yourselves, <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">4</span>not looking to your own interests but each of you to the interests of the others.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:20px;min-width:0;opacity:1">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#161412;letter-spacing:.08em">PHILIPPIANS 2:5–11</div>
+    <p style="margin:0;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.3;color:#161412;text-wrap:pretty"><span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">5</span>In your relationships with one another, have the same mindset as Christ Jesus: <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">6</span>Who, being in very nature God, did not consider equality with God something to be used to his own advantage; <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">7</span>rather, he made himself nothing by taking the very nature of a servant, being made in human likeness. <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">8</span>And being found in appearance as a man, he humbled himself by becoming obedient to death — even death on a cross! <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">9</span>Therefore God exalted him to the highest place and gave him the name that is above every name, <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">10</span>that at the name of Jesus every knee should bow, in heaven and on earth and under the earth, <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">11</span>and every tongue acknowledge that Jesus Christ is Lord, to the glory of God the Father.</p>
+  </div>
+  <div></div>
+</section>
+<section data-label="D-03b" data-speaker-notes="Question lands beside the passage, arrow pointing at it. Nothing else moves." style="background:#F4EFE6;color:#161412;font-family:Archivo,sans-serif;padding:120px var(--pad-x) 80px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:56px;align-content:start">
+  <div style="position:absolute;left:0;top:0;width:680px;height:1080px;background:#F2C21B;clip-path:polygon(0 0,440px 0,680px 540px,440px 1080px,0 1080px);z-index:0"></div>
+  <div style="position:relative;display:flex;flex-direction:column;justify-content:center;min-width:0;padding-top:60px">
+    <h2 style="margin:0;font-family:'Alfa Slab One',serif;font-size:80px;font-weight:400;line-height:1;letter-spacing:.01em;text-transform:uppercase;color:#161412;text-wrap:pretty;max-width:380px;position:relative;z-index:1;margin-left:-60px">What would you preach?</h2>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:20px;min-width:0;opacity:1">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#161412;letter-spacing:.08em">PHILIPPIANS 2:5–11</div>
+    <p style="margin:0;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.3;color:#161412;text-wrap:pretty"><span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">5</span>In your relationships with one another, have the same mindset as Christ Jesus: <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">6</span>Who, being in very nature God, did not consider equality with God something to be used to his own advantage; <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">7</span>rather, he made himself nothing by taking the very nature of a servant, being made in human likeness. <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">8</span>And being found in appearance as a man, he humbled himself by becoming obedient to death — even death on a cross! <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">9</span>Therefore God exalted him to the highest place and gave him the name that is above every name, <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">10</span>that at the name of Jesus every knee should bow, in heaven and on earth and under the earth, <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">11</span>and every tongue acknowledge that Jesus Christ is Lord, to the glory of God the Father.</p>
+  </div>
+  <div></div>
+</section>
+<section data-label="D-04" data-speaker-notes="Pull back: 2:1–4 appears left of the passage; 5–11 dims. Third column held empty." style="background:#F4EFE6;color:#161412;font-family:Archivo,sans-serif;padding:120px var(--pad-x) 80px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:56px;align-content:start">
+  <div style="display:flex;flex-direction:column;gap:20px;min-width:0;opacity:1">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#161412;letter-spacing:.08em">PHILIPPIANS 2:1–4</div>
+    <p style="margin:0;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.3;color:#161412;text-wrap:pretty"><span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">1</span>Therefore if you have any encouragement from being united with Christ, if any comfort from his love, if any common sharing in the Spirit, if any tenderness and compassion, <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">2</span>then make my joy complete by being like-minded, having the same love, being one in spirit and of one mind. <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">3</span>Do nothing out of selfish ambition or vain conceit. Rather, in humility value others above yourselves, <span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">4</span>not looking to your own interests but each of you to the interests of the others.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:20px;min-width:0;opacity:0.55">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#4A433C;letter-spacing:.08em">PHILIPPIANS 2:5–11</div>
+    <p style="margin:0;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.3;color:#4A433C;text-wrap:pretty"><span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">5</span>In your relationships with one another, have the same mindset as Christ Jesus: <span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">6</span>Who, being in very nature God, did not consider equality with God something to be used to his own advantage; <span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">7</span>rather, he made himself nothing by taking the very nature of a servant, being made in human likeness. <span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">8</span>And being found in appearance as a man, he humbled himself by becoming obedient to death — even death on a cross! <span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">9</span>Therefore God exalted him to the highest place and gave him the name that is above every name, <span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">10</span>that at the name of Jesus every knee should bow, in heaven and on earth and under the earth, <span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">11</span>and every tongue acknowledge that Jesus Christ is Lord, to the glory of God the Father.</p>
+  </div>
+  <div></div>
+</section>
+<section data-label="D-05" data-speaker-notes="2:12 lands in the held third column; nothing else moves. 'therefore' marked in the lens tone." style="background:#F4EFE6;color:#161412;font-family:Archivo,sans-serif;padding:120px var(--pad-x) 80px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:56px;align-content:start">
+  <div style="display:flex;flex-direction:column;gap:20px;min-width:0;opacity:0.55">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#4A433C;letter-spacing:.08em">PHILIPPIANS 2:1–4</div>
+    <p style="margin:0;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.3;color:#4A433C;text-wrap:pretty"><span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">1</span>Therefore if you have any encouragement from being united with Christ, if any comfort from his love, if any common sharing in the Spirit, if any tenderness and compassion, <span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">2</span>then make my joy complete by being like-minded, having the same love, being one in spirit and of one mind. <span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">3</span>Do nothing out of selfish ambition or vain conceit. Rather, in humility value others above yourselves, <span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">4</span>not looking to your own interests but each of you to the interests of the others.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:20px;min-width:0;opacity:0.55">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#4A433C;letter-spacing:.08em">PHILIPPIANS 2:5–11</div>
+    <p style="margin:0;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.3;color:#4A433C;text-wrap:pretty"><span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">5</span>In your relationships with one another, have the same mindset as Christ Jesus: <span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">6</span>Who, being in very nature God, did not consider equality with God something to be used to his own advantage; <span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">7</span>rather, he made himself nothing by taking the very nature of a servant, being made in human likeness. <span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">8</span>And being found in appearance as a man, he humbled himself by becoming obedient to death — even death on a cross! <span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">9</span>Therefore God exalted him to the highest place and gave him the name that is above every name, <span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">10</span>that at the name of Jesus every knee should bow, in heaven and on earth and under the earth, <span style="font:700 26px 'IBM Plex Mono',monospace;color:#4A433C;margin-right:8px">11</span>and every tongue acknowledge that Jesus Christ is Lord, to the glory of God the Father.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:20px;min-width:0;opacity:1">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#161412;letter-spacing:.08em">PHILIPPIANS 2:12</div>
+    <p style="margin:0;font-family:'Source Serif 4',serif;font-size:29px;line-height:1.3;color:#161412;text-wrap:pretty"><span style="font:700 26px 'IBM Plex Mono',monospace;color:#161412;margin-right:8px">12</span><strong style="color:#161412;font-weight:600">Therefore</strong>, my dear friends, as you have always obeyed — not only in my presence, but now much more in my absence — continue to work out your salvation with fear and trembling.</p>
+  </div>
+</section>
+<section data-label="D-06" data-speaker-notes="Landing line. Margin card is optional." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;align-items:center;gap:120px">
+  <h2 style="margin:0;font-size:72px;font-weight:700;line-height:1.15;letter-spacing:.01em;flex:1;text-wrap:pretty">A talk that starts at v.5 preaches a real idea that isn't this text's idea.</h2>
+  <div style="width:440px;flex:none;background:#1E2426;border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:20px">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">PHILIPPIANS 4:2</div>
+    <div style="font-size:36px;line-height:1.3;font-weight:600;text-wrap:pretty">Euodia and Syntyche — the church was divided.</div>
+  </div>
+</section>
+<section data-label="DF-00" data-speaker-notes="Section marker. Define the term before the lenses." style="background:#0E1112;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <img src="assets/img/lens-street.jpg" alt="A single lens held up to a night street, the road sharp through the glass" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 50%">
+  <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(14,17,18,.92) 0%,rgba(14,17,18,.7) 32%,rgba(14,17,18,.15) 60%,rgba(14,17,18,0) 100%),linear-gradient(to top,rgba(14,17,18,.85) 0%,rgba(14,17,18,0) 45%)"></div>
+  <div style="position:absolute;left:var(--pad-x);bottom:var(--pad-bottom);display:flex;flex-direction:column;gap:var(--gap-title)">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">DEFINITION</div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-family:'Alfa Slab One',serif;font-size:103px;font-weight:400;line-height:1.05;letter-spacing:.01em;text-transform:uppercase;color:#EDE7DA;text-shadow:0 4px 24px rgba(0,0,0,.6)"><span>Defining</span><span>Exegesis</span></div>
+  </div>
+</section>
+<section data-label="DF-01" data-speaker-notes="First negative definition. Lines two and three held invisible so nothing moves." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:center;gap:var(--gap-title)">
+  <h3 style="margin:0;font-family:'Alfa Slab One',serif;font-size:72px;font-weight:400;line-height:1.1;letter-spacing:.01em;max-width:1560px;text-wrap:pretty;color:#EDE7DA"><span style="font-family:Archivo,sans-serif;font-weight:400">Exegesis</span> <span style="color:#F2C21B">is</span> <strong style="font-weight:400;color:#F2C21B">not</strong> <span style="font-family:Archivo,sans-serif;font-weight:400">discovering what <em>we</em> think it means.</span></h3>
+  <h3 style="margin:0;font-family:'Alfa Slab One',serif;font-size:72px;font-weight:400;line-height:1.1;letter-spacing:.01em;max-width:1560px;text-wrap:pretty;visibility:hidden"><span style="font-family:Archivo,sans-serif;font-weight:400">Exegesis</span> is not <span style="font-family:Archivo,sans-serif;font-weight:400">making the text mean what we want it to mean.</span></h3>
+  <h2 style="margin:0;font-family:'Alfa Slab One',serif;font-size:72px;font-weight:400;line-height:1.1;letter-spacing:.01em;max-width:1560px;text-wrap:pretty;visibility:hidden"><span style="font-family:Archivo,sans-serif;font-weight:400">Exegesis</span> <em style="color:#F2C21B;font-style:normal">is</em> <span style="font-family:Archivo,sans-serif;font-weight:400">discovering what the biblical author intended.</span></h2>
+</section>
+<section data-label="DF-02" data-speaker-notes="Line one quiets; line two lands in place." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:center;gap:var(--gap-title)">
+  <h3 style="margin:0;font-family:'Alfa Slab One',serif;font-size:72px;font-weight:400;line-height:1.1;letter-spacing:.01em;max-width:1560px;text-wrap:pretty;color:#A9B4B6;opacity:.45"><span style="font-family:Archivo,sans-serif;font-weight:400">Exegesis</span> is not <span style="font-family:Archivo,sans-serif;font-weight:400">discovering what <em>we</em> think it means.</span></h3>
+  <h3 style="margin:0;font-family:'Alfa Slab One',serif;font-size:72px;font-weight:400;line-height:1.1;letter-spacing:.01em;max-width:1560px;text-wrap:pretty;color:#EDE7DA"><span style="font-family:Archivo,sans-serif;font-weight:400">Exegesis</span> <span style="color:#F2C21B">is</span> <strong style="font-weight:400;color:#F2C21B">not</strong> <span style="font-family:Archivo,sans-serif;font-weight:400">making the text mean what we want it to mean.</span></h3>
+  <h2 style="margin:0;font-family:'Alfa Slab One',serif;font-size:72px;font-weight:400;line-height:1.1;letter-spacing:.01em;max-width:1560px;text-wrap:pretty;visibility:hidden"><span style="font-family:Archivo,sans-serif;font-weight:400">Exegesis</span> <em style="color:#F2C21B;font-style:normal">is</em> <span style="font-family:Archivo,sans-serif;font-weight:400">discovering what the biblical author intended.</span></h2>
+</section>
+<section data-label="DF-03" data-speaker-notes="Both negatives strike through; the positive lands full weight." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:center;gap:var(--gap-title)">
+  <h3 style="margin:0;font-family:'Alfa Slab One',serif;font-size:72px;font-weight:400;line-height:1.1;letter-spacing:.01em;max-width:1560px;text-wrap:pretty;color:#A9B4B6;opacity:.45;text-decoration:line-through;text-decoration-thickness:7px"><span style="font-family:Archivo,sans-serif;font-weight:400">Exegesis</span> is not <span style="font-family:Archivo,sans-serif;font-weight:400">discovering what <em>we</em> think it means.</span></h3>
+  <h3 style="margin:0;font-family:'Alfa Slab One',serif;font-size:72px;font-weight:400;line-height:1.1;letter-spacing:.01em;max-width:1560px;text-wrap:pretty;color:#A9B4B6;opacity:.45;text-decoration:line-through;text-decoration-thickness:7px"><span style="font-family:Archivo,sans-serif;font-weight:400">Exegesis</span> is not <span style="font-family:Archivo,sans-serif;font-weight:400">making the text mean what we want it to mean.</span></h3>
+  <h2 style="margin:0;font-family:'Alfa Slab One',serif;font-size:72px;font-weight:400;line-height:1.1;letter-spacing:.01em;max-width:1560px;text-wrap:pretty;"><span style="font-family:Archivo,sans-serif;font-weight:400">Exegesis</span> <em style="color:#F2C21B;font-style:normal">is</em> <span style="font-family:Archivo,sans-serif;font-weight:400">discovering what the biblical author intended.</span></h2>
+</section>
+<section data-label="DF-04" data-speaker-notes="Two objects, one relationship." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:center;gap:64px">
+  <div style="display:flex;align-items:center;gap:40px">
+    <div style="flex:1;background:#1E2426;border-radius:28px;padding:64px 56px;display:flex;flex-direction:column;gap:24px">
+      <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">HERMENEUTICS</div>
+      <div style="font-size:48px;font-weight:700;line-height:1.2;text-wrap:pretty">The principles of interpretation.</div>
+    </div>
+    <div style="display:flex;align-items:center;flex:none"><div style="width:120px;height:14px;background:#EDE7DA"></div><div style="width:0;height:0;border-top:26px solid transparent;border-bottom:26px solid transparent;border-left:40px solid #EDE7DA"></div></div>
+    <div style="flex:1;background:#F2C21B;color:#161412;border-radius:28px;padding:64px 56px;display:flex;flex-direction:column;gap:24px">
+      <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#161412;letter-spacing:.08em">EXEGESIS</div>
+      <div style="font-size:48px;font-weight:700;line-height:1.2;text-wrap:pretty">Applying them to a text.</div>
+    </div>
+  </div>
+</section>
+<section data-label="P-00a" data-speaker-notes="What a phoropter is. Archival photo, full bleed. Hold." style="background:#0E1314;color:#111516;font-family:Archivo,sans-serif;overflow:hidden">
+  <img src="assets/img/phoropter-archival.jpg" alt="Optometrist adjusting a phoropter, archival photo" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 40%;filter:grayscale(1) contrast(1.05)">
+  <div style="position:absolute;left:0;right:0;bottom:0;height:560px;background:linear-gradient(to top,rgba(14,19,20,1) 0%,rgba(14,19,20,.9) 40%,rgba(14,19,20,0) 100%)"></div>
+  <div style="position: absolute; left: 0px; bottom: var(--pad-bottom); display: flex; flex-direction: column; gap: 20px; background: #F2C21B; color: #161412; padding: 32px 48px 36px 80px; width: 1209px; height: 193px; box-sizing: content-box; overflow: hidden; clip-path: polygon(0 0, 985px 0, 100% 100%, 0 100%)">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#161412">fə-ˈräp-tər</div><div style="font-family:'Alfa Slab One',serif;font-size:128px;line-height:1;letter-spacing:.02em;text-transform:uppercase">Phoropter</div>
+    
+  </div>
+</section>
+<section data-label="P-00b-blank" data-speaker-notes="Blank chart — no letters." style="background:#0E1314;color:#111516;font-family:Archivo,sans-serif;overflow:hidden">
+  <img src="assets/img/lens-letters.jpg" alt="Looking through a phoropter lens at an eye chart" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%">
+  <div style="position:absolute;left:945px;top:408px;width:160px;height:62px;background:#D9F3E6;box-shadow:0 0 10px 8px #D9F3E6;white-space:nowrap;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:9px;padding-left:14px;box-sizing:border-box;font-family:Archivo,sans-serif;font-size:11px;font-weight:600;letter-spacing:.42em;line-height:1;color:#5E6866;filter:blur(.4px)">
+        <span style="position:absolute;inset:-8px;background-image:url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'&gt;&lt;filter id='n'&gt;&lt;feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/&gt;&lt;feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/&gt;&lt;/filter&gt;&lt;rect width='100%' height='100%' filter='url(%23n)'/&gt;&lt;/svg&gt;&quot;);opacity:.35;mix-blend-mode:multiply;pointer-events:none"></span>
+  </div>
+  
+</section>
+<section data-label="P-00b" data-speaker-notes="A few steps back, looking through the lens. Real photo. Sets up the step-behind." style="background:#0E1314;color:#111516;font-family:Archivo,sans-serif;overflow:hidden">
+  <img src="assets/img/lens-letters.jpg" alt="Looking through a phoropter lens at an eye chart" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%">
+  <div style="position:absolute;left:945px;top:408px;width:160px;height:62px;background:#D9F3E6;box-shadow:0 0 10px 8px #D9F3E6;white-space:nowrap;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:9px;padding-left:14px;box-sizing:border-box;font-family:Archivo,sans-serif;font-size:11px;font-weight:600;letter-spacing:.42em;line-height:1;color:#5E6866;filter:blur(.4px)">
+    <span>BETTER ONE</span><span>OR TWO?</span>
+    <span style="position:absolute;inset:-8px;background-image:url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'&gt;&lt;filter id='n'&gt;&lt;feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/&gt;&lt;feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/&gt;&lt;/filter&gt;&lt;rect width='100%' height='100%' filter='url(%23n)'/&gt;&lt;/svg&gt;&quot;);opacity:.35;mix-blend-mode:multiply;pointer-events:none"></span>
+  </div>
+  
+</section>
+<section data-label="P-00d" data-speaker-notes="Duplicate of P-00c with the chart removed — blank lens." style="background:#0B0F10;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 62% 50%,#1F2728 0%,#131919 45%,#0B0F10 80%)"></div>
+  <div style="position:absolute;left:-420px;top:60px;width:960px;height:960px;border-radius:50%;background:radial-gradient(circle,#2B3434 0%,#1C2424 55%,rgba(28,36,36,0) 72%);filter:blur(22px);opacity:.9"></div>
+  <div style="position:absolute;left:-300px;top:180px;width:720px;height:720px;border-radius:50%;border:56px solid #2E3839;filter:blur(14px);opacity:.75"></div>
+  <div style="position:absolute;left:600px;top:80px;width:920px;height:920px;border-radius:50%;background:radial-gradient(circle at 38% 28%,#5A6567 0%,#3A4546 45%,#252D2E 100%);box-shadow:0 40px 120px rgba(0,0,0,.7),inset 0 -20px 40px rgba(0,0,0,.45),inset 0 16px 30px rgba(255,255,255,.08)"></div>
+  <div data-rim style="position:absolute;left:626px;top:106px;width:868px;height:868px;border-radius:50%;background:repeating-conic-gradient(rgba(0,0,0,.55) 0 .35deg,transparent .35deg 1.5deg,rgba(255,255,255,.07) 1.5deg 1.8deg,transparent 1.8deg 3deg);-webkit-mask:radial-gradient(circle,transparent 0 386px,#000 386px 436px,transparent 436px);mask:radial-gradient(circle,transparent 0 386px,#000 386px 436px,transparent 436px)"></div>
+  <div data-rim style="position:absolute;left:626px;top:106px;width:868px;height:868px;border-radius:50%;background:repeating-conic-gradient(rgba(0,0,0,.7) 0 .5deg,transparent .5deg 15deg);-webkit-mask:radial-gradient(circle,transparent 0 380px,#000 380px 436px,transparent 436px);mask:radial-gradient(circle,transparent 0 380px,#000 380px 436px,transparent 436px)"></div>
+  <div data-rim style="position:absolute;left:626px;top:106px;width:868px;height:868px;border-radius:50%;background:conic-gradient(from 200deg,rgba(255,255,255,.22),rgba(255,255,255,0) 25%,rgba(0,0,0,.35) 50%,rgba(255,255,255,0) 75%,rgba(255,255,255,.22));-webkit-mask:radial-gradient(circle,transparent 0 380px,#000 380px 436px,transparent 436px);mask:radial-gradient(circle,transparent 0 380px,#000 380px 436px,transparent 436px)"></div>
+  <div data-rim style="position:absolute;left:626px;top:106px;width:868px;height:868px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.14),inset 0 0 0 3px rgba(0,0,0,.5),inset 0 8px 18px rgba(0,0,0,.6)"></div>
+  <div style="position:absolute;left:660px;top:140px;width:800px;height:800px;border-radius:50%;background:linear-gradient(160deg,#5B6668,#232B2C 55%,#414C4D);box-shadow:inset 0 0 0 4px #0B0F10"></div>
+  <div style="position:absolute;left:700px;top:180px;width:720px;height:720px;border-radius:50%;background:#0B0F10;box-shadow:inset 0 0 0 10px #141A1B,inset 0 0 0 12px #55605F"></div>
+  <div style="position:absolute;left:740px;top:220px;width:640px;height:640px;border-radius:50%;background:#E9E4D6;overflow:hidden;box-shadow:inset 0 0 80px rgba(0,0,0,.35)">
+      
+      <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.28),rgba(255,255,255,0) 40%)"></div>
+  </div>
+  <div style="position:absolute;left:1360px;top:820px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#4D5859,#1E2626 70%);box-shadow:0 10px 40px rgba(0,0,0,.6),inset 0 0 0 6px #33403F"></div>
+  <div style="position:absolute;left:1420px;top:880px;width:80px;height:80px;border-radius:50%;background:#0B0F10;box-shadow:inset 0 0 0 4px #55605F"></div>
+  <div style="position:absolute;left:var(--pad-x);bottom:var(--pad-bottom);width:420px;display:flex;flex-direction:column;gap:16px">
+    
+    
+  </div>
+</section>
+<section data-label="P2-01" data-speaker-notes="Lens 1: Applied Meaning (others). Scripture stays blurred behind an amber lens." style="background:#0B0F10;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 62% 50%,#1F2728 0%,#131919 45%,#0B0F10 80%)"></div>
+  <div style="position:absolute;left:-420px;top:60px;width:960px;height:960px;border-radius:50%;background:radial-gradient(circle,#2B3434 0%,#1C2424 55%,rgba(28,36,36,0) 72%);filter:blur(22px);opacity:.9"></div>
+  <div style="position:absolute;left:-300px;top:180px;width:720px;height:720px;border-radius:50%;border:56px solid #2E3839;filter:blur(14px);opacity:.75"></div>
+  <div style="position:absolute;left:600px;top:80px;width:920px;height:920px;border-radius:50%;background:radial-gradient(circle at 38% 28%,#5A6567 0%,#3A4546 45%,#252D2E 100%);box-shadow:0 40px 120px rgba(0,0,0,.7),inset 0 -20px 40px rgba(0,0,0,.45),inset 0 16px 30px rgba(255,255,255,.08)"></div>
+  <div data-rim style="position:absolute;left:626px;top:106px;width:868px;height:868px;border-radius:50%;background:repeating-conic-gradient(rgba(0,0,0,.55) 0 .35deg,transparent .35deg 1.5deg,rgba(255,255,255,.07) 1.5deg 1.8deg,transparent 1.8deg 3deg);-webkit-mask:radial-gradient(circle,transparent 0 386px,#000 386px 436px,transparent 436px);mask:radial-gradient(circle,transparent 0 386px,#000 386px 436px,transparent 436px)"></div>
+  <div data-rim style="position:absolute;left:626px;top:106px;width:868px;height:868px;border-radius:50%;background:repeating-conic-gradient(rgba(0,0,0,.7) 0 .5deg,transparent .5deg 15deg);-webkit-mask:radial-gradient(circle,transparent 0 380px,#000 380px 436px,transparent 436px);mask:radial-gradient(circle,transparent 0 380px,#000 380px 436px,transparent 436px)"></div>
+  <div data-rim style="position:absolute;left:626px;top:106px;width:868px;height:868px;border-radius:50%;background:conic-gradient(from 200deg,rgba(255,255,255,.22),rgba(255,255,255,0) 25%,rgba(0,0,0,.35) 50%,rgba(255,255,255,0) 75%,rgba(255,255,255,.22));-webkit-mask:radial-gradient(circle,transparent 0 380px,#000 380px 436px,transparent 436px);mask:radial-gradient(circle,transparent 0 380px,#000 380px 436px,transparent 436px)"></div>
+  <div data-rim style="position:absolute;left:626px;top:106px;width:868px;height:868px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.14),inset 0 0 0 3px rgba(0,0,0,.5),inset 0 8px 18px rgba(0,0,0,.6)"></div>
+  <div style="position:absolute;left:660px;top:140px;width:800px;height:800px;border-radius:50%;background:linear-gradient(160deg,#5B6668,#232B2C 55%,#414C4D);box-shadow:inset 0 0 0 4px #0B0F10"></div>
+  <div style="position:absolute;left:700px;top:180px;width:720px;height:720px;border-radius:50%;background:#0B0F10;box-shadow:inset 0 0 0 10px #141A1B,inset 0 0 0 12px #55605F"></div>
+  <div style="position:absolute;left:740px;top:220px;width:640px;height:640px;border-radius:50%;background:#E9E4D6;overflow:hidden;box-shadow:inset 0 0 80px rgba(0,0,0,.35)">
+      <div data-chart style="position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:22px;font-family:'IBM Plex Mono',monospace;font-weight:700;letter-spacing:.08em;line-height:1;text-align:center;color:#1C1916;filter:blur(14px)">
+        <div style="font-size:150px">IN YOUR</div><div style="font-size:96px">RELATIONSHIPS</div><div style="font-size:66px">WITH ONE ANOTHER</div><div style="font-size:48px">HAVE THE SAME MINDSET</div><div style="font-size:36px">AS CHRIST JESUS, WHO</div>
+      </div>
+      <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.28),rgba(255,255,255,0) 40%)"></div>
+      
+      <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.28),rgba(255,255,255,0) 40%)"></div>
+  </div>
+  <div style="position:absolute;left:1360px;top:820px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#4D5859,#1E2626 70%);box-shadow:0 10px 40px rgba(0,0,0,.6),inset 0 0 0 6px #33403F"></div>
+  <div style="position:absolute;left:1420px;top:880px;width:80px;height:80px;border-radius:50%;background:#0B0F10;box-shadow:inset 0 0 0 4px #55605F"></div>
+  <div data-lenslabel style="position:absolute;left:var(--pad-x);bottom:var(--pad-bottom);width:440px;display:flex;flex-direction:column;gap:20px">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#F2C21B;display:flex;gap:28px"><span>01</span><span>·</span><span>OTHERS</span></div>
+    <div style="font-family:'Alfa Slab One',serif;font-size:88px;line-height:1;letter-spacing:.01em;color:#EDE7DA;text-transform:uppercase;text-wrap:pretty">Applied Meaning</div>
+  </div>
+</section>
+<section data-label="P2-02" data-speaker-notes="Lens 2: Personal Exposure (you). Still blurred." style="background:#0B0F10;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 62% 50%,#1F2728 0%,#131919 45%,#0B0F10 80%)"></div>
+  <div style="position:absolute;left:-420px;top:60px;width:960px;height:960px;border-radius:50%;background:radial-gradient(circle,#2B3434 0%,#1C2424 55%,rgba(28,36,36,0) 72%);filter:blur(22px);opacity:.9"></div>
+  <div style="position:absolute;left:-300px;top:180px;width:720px;height:720px;border-radius:50%;border:56px solid #2E3839;filter:blur(14px);opacity:.75"></div>
+  <div style="position:absolute;left:600px;top:80px;width:920px;height:920px;border-radius:50%;background:radial-gradient(circle at 38% 28%,#5A6567 0%,#3A4546 45%,#252D2E 100%);box-shadow:0 40px 120px rgba(0,0,0,.7),inset 0 -20px 40px rgba(0,0,0,.45),inset 0 16px 30px rgba(255,255,255,.08)"></div>
+  <div data-rim style="position:absolute;left:626px;top:106px;width:868px;height:868px;border-radius:50%;background:repeating-conic-gradient(rgba(0,0,0,.55) 0 .35deg,transparent .35deg 1.5deg,rgba(255,255,255,.07) 1.5deg 1.8deg,transparent 1.8deg 3deg);-webkit-mask:radial-gradient(circle,transparent 0 386px,#000 386px 436px,transparent 436px);mask:radial-gradient(circle,transparent 0 386px,#000 386px 436px,transparent 436px)"></div>
+  <div data-rim style="position:absolute;left:626px;top:106px;width:868px;height:868px;border-radius:50%;background:repeating-conic-gradient(rgba(0,0,0,.7) 0 .5deg,transparent .5deg 15deg);-webkit-mask:radial-gradient(circle,transparent 0 380px,#000 380px 436px,transparent 436px);mask:radial-gradient(circle,transparent 0 380px,#000 380px 436px,transparent 436px)"></div>
+  <div data-rim style="position:absolute;left:626px;top:106px;width:868px;height:868px;border-radius:50%;background:conic-gradient(from 200deg,rgba(255,255,255,.22),rgba(255,255,255,0) 25%,rgba(0,0,0,.35) 50%,rgba(255,255,255,0) 75%,rgba(255,255,255,.22));-webkit-mask:radial-gradient(circle,transparent 0 380px,#000 380px 436px,transparent 436px);mask:radial-gradient(circle,transparent 0 380px,#000 380px 436px,transparent 436px)"></div>
+  <div data-rim style="position:absolute;left:626px;top:106px;width:868px;height:868px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.14),inset 0 0 0 3px rgba(0,0,0,.5),inset 0 8px 18px rgba(0,0,0,.6)"></div>
+  <div style="position:absolute;left:660px;top:140px;width:800px;height:800px;border-radius:50%;background:linear-gradient(160deg,#5B6668,#232B2C 55%,#414C4D);box-shadow:inset 0 0 0 4px #0B0F10"></div>
+  <div style="position:absolute;left:700px;top:180px;width:720px;height:720px;border-radius:50%;background:#0B0F10;box-shadow:inset 0 0 0 10px #141A1B,inset 0 0 0 12px #55605F"></div>
+  <div style="position:absolute;left:740px;top:220px;width:640px;height:640px;border-radius:50%;background:#E9E4D6;overflow:hidden;box-shadow:inset 0 0 80px rgba(0,0,0,.35)">
+      <div data-chart style="position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:22px;font-family:'IBM Plex Mono',monospace;font-weight:700;letter-spacing:.08em;line-height:1;text-align:center;color:#1C1916;filter:blur(6px)">
+        <div style="font-size:150px">IN YOUR</div><div style="font-size:96px">RELATIONSHIPS</div><div style="font-size:66px">WITH ONE ANOTHER</div><div style="font-size:48px">HAVE THE SAME MINDSET</div><div style="font-size:36px">AS CHRIST JESUS, WHO</div>
+      </div>
+      <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.28),rgba(255,255,255,0) 40%)"></div>
+      
+      <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.28),rgba(255,255,255,0) 40%)"></div>
+  </div>
+  <div style="position:absolute;left:1360px;top:820px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#4D5859,#1E2626 70%);box-shadow:0 10px 40px rgba(0,0,0,.6),inset 0 0 0 6px #33403F"></div>
+  <div style="position:absolute;left:1420px;top:880px;width:80px;height:80px;border-radius:50%;background:#0B0F10;box-shadow:inset 0 0 0 4px #55605F"></div>
+  <div data-lenslabel style="position:absolute;left:var(--pad-x);bottom:var(--pad-bottom);width:440px;display:flex;flex-direction:column;gap:20px">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#F2C21B;display:flex;gap:28px"><span>02</span><span>·</span><span>YOU</span></div>
+    <div style="font-family:'Alfa Slab One',serif;font-size:88px;line-height:1;letter-spacing:.01em;color:#EDE7DA;text-transform:uppercase;text-wrap:pretty">Personal Exposure</div>
+  </div>
+</section>
+<section data-label="P2-03" data-speaker-notes="Lens 3: Original Intent (author). Scripture snaps crisp." style="background:#0B0F10;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 62% 50%,#1F2728 0%,#131919 45%,#0B0F10 80%)"></div>
+  <div style="position:absolute;left:-420px;top:60px;width:960px;height:960px;border-radius:50%;background:radial-gradient(circle,#2B3434 0%,#1C2424 55%,rgba(28,36,36,0) 72%);filter:blur(22px);opacity:.9"></div>
+  <div style="position:absolute;left:-300px;top:180px;width:720px;height:720px;border-radius:50%;border:56px solid #2E3839;filter:blur(14px);opacity:.75"></div>
+  <div style="position:absolute;left:600px;top:80px;width:920px;height:920px;border-radius:50%;background:radial-gradient(circle at 38% 28%,#5A6567 0%,#3A4546 45%,#252D2E 100%);box-shadow:0 40px 120px rgba(0,0,0,.7),inset 0 -20px 40px rgba(0,0,0,.45),inset 0 16px 30px rgba(255,255,255,.08)"></div>
+  <div data-rim style="position:absolute;left:626px;top:106px;width:868px;height:868px;border-radius:50%;background:repeating-conic-gradient(rgba(0,0,0,.55) 0 .35deg,transparent .35deg 1.5deg,rgba(255,255,255,.07) 1.5deg 1.8deg,transparent 1.8deg 3deg);-webkit-mask:radial-gradient(circle,transparent 0 386px,#000 386px 436px,transparent 436px);mask:radial-gradient(circle,transparent 0 386px,#000 386px 436px,transparent 436px)"></div>
+  <div data-rim style="position:absolute;left:626px;top:106px;width:868px;height:868px;border-radius:50%;background:repeating-conic-gradient(rgba(0,0,0,.7) 0 .5deg,transparent .5deg 15deg);-webkit-mask:radial-gradient(circle,transparent 0 380px,#000 380px 436px,transparent 436px);mask:radial-gradient(circle,transparent 0 380px,#000 380px 436px,transparent 436px)"></div>
+  <div data-rim style="position:absolute;left:626px;top:106px;width:868px;height:868px;border-radius:50%;background:conic-gradient(from 200deg,rgba(255,255,255,.22),rgba(255,255,255,0) 25%,rgba(0,0,0,.35) 50%,rgba(255,255,255,0) 75%,rgba(255,255,255,.22));-webkit-mask:radial-gradient(circle,transparent 0 380px,#000 380px 436px,transparent 436px);mask:radial-gradient(circle,transparent 0 380px,#000 380px 436px,transparent 436px)"></div>
+  <div data-rim style="position:absolute;left:626px;top:106px;width:868px;height:868px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.14),inset 0 0 0 3px rgba(0,0,0,.5),inset 0 8px 18px rgba(0,0,0,.6)"></div>
+  <div style="position:absolute;left:660px;top:140px;width:800px;height:800px;border-radius:50%;background:linear-gradient(160deg,#5B6668,#232B2C 55%,#414C4D);box-shadow:inset 0 0 0 4px #0B0F10"></div>
+  <div style="position:absolute;left:700px;top:180px;width:720px;height:720px;border-radius:50%;background:#0B0F10;box-shadow:inset 0 0 0 10px #141A1B,inset 0 0 0 12px #55605F"></div>
+  <div style="position:absolute;left:740px;top:220px;width:640px;height:640px;border-radius:50%;background:#E9E4D6;overflow:hidden;box-shadow:inset 0 0 80px rgba(0,0,0,.35)">
+      <div data-chart style="position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:22px;font-family:'IBM Plex Mono',monospace;font-weight:700;letter-spacing:.08em;line-height:1;text-align:center;color:#1C1916;filter:blur(0px)">
+        <div style="font-size:150px">IN YOUR</div><div style="font-size:96px">RELATIONSHIPS</div><div style="font-size:66px">WITH ONE ANOTHER</div><div style="font-size:48px">HAVE THE SAME MINDSET</div><div style="font-size:36px">AS CHRIST JESUS, WHO</div>
+      </div>
+      <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.28),rgba(255,255,255,0) 40%)"></div>
+      
+      <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.28),rgba(255,255,255,0) 40%)"></div>
+  </div>
+  <div style="position:absolute;left:1360px;top:820px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#4D5859,#1E2626 70%);box-shadow:0 10px 40px rgba(0,0,0,.6),inset 0 0 0 6px #33403F"></div>
+  <div style="position:absolute;left:1420px;top:880px;width:80px;height:80px;border-radius:50%;background:#0B0F10;box-shadow:inset 0 0 0 4px #55605F"></div>
+  <div data-lenslabel style="position:absolute;left:var(--pad-x);bottom:var(--pad-bottom);width:440px;display:flex;flex-direction:column;gap:20px">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#F2C21B;display:flex;gap:28px"><span>03</span><span>·</span><span>AUTHOR</span></div>
+    <div style="font-family:'Alfa Slab One',serif;font-size:88px;line-height:1;letter-spacing:.01em;color:#EDE7DA;text-transform:uppercase;text-wrap:pretty">Original Intent</div>
+  </div>
+</section>
+<section data-label="P-14" data-speaker-notes="Mask fully retracts; ground returns to light. Sets up the method." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:center;gap:var(--gap-title)">
+  <div style="display:flex;gap:20px"><div style="width:120px;height:120px;border-radius:50%;border:10px solid #F2C21B"></div><div style="width:120px;height:120px;border-radius:50%;border:10px solid #A9B4B6;margin-left:-60px"></div><div style="width:120px;height:120px;border-radius:50%;border:10px solid #A9B4B6;margin-left:-60px"></div></div>
+  <h2 style="margin:0;font-size:72px;font-weight:700;line-height:1.15;letter-spacing:.01em;max-width:1560px;text-wrap:pretty">Once you have the right lenses to look through, you get <em style="color:#F2C21B">textual clarity</em>. That's what <em style="color:#F2C21B">biblical exegesis</em> is all about.</h2>
+</section>
+<section data-label="MO-01" data-speaker-notes="Section marker. Now the method." style="background:#0E1112;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <img src="assets/img/eyechart-angled.webp" alt="Vintage illuminated eye chart on a dark wall, seen at an angle" style="position:absolute;top:0;bottom:0;right:0;width:900px;height:100%;object-fit:cover;object-position:50% 40%">
+  <div style="position:absolute;top:0;bottom:0;right:640px;width:360px;background:linear-gradient(to right,#0E1112 0%,rgba(14,17,18,.85) 40%,rgba(14,17,18,0) 100%)"></div>
+  <div style="position:absolute;left:var(--pad-x);top:0;bottom:0;width:960px;display:flex;flex-direction:column;justify-content:center;gap:var(--gap-title)">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">METHOD</div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-family:'Alfa Slab One',serif;font-size:103px;font-weight:400;line-height:1.05;letter-spacing:.01em;text-transform:uppercase;color:#EDE7DA"><span>Exegesis</span><span>Method</span><span>Overview</span></div>
+  </div>
+</section>
+<section data-label="M-00" data-speaker-notes="Empty spine — the shape of the process before anything fills it." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;left:1160px;top:0;width:760px;height:1080px;background:#F2C21B"></div>
+  <div style="position:absolute;left:var(--pad-x);top:200px;display:flex;flex-direction:column;gap:12px;width:900px">
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">01</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">02</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">03</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">04</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">05</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">06</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">07</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">08</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">09</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+  </div>
+  <div style="position:absolute;left:1220px;top:300px;width:600px;display:flex;flex-direction:column;gap:28px;color:#161412">
+    <div style="font:700 30px 'IBM Plex Mono',monospace;color:#161412;letter-spacing:.08em">EXEGESIS METHOD</div>
+    <div style="font-family:'Alfa Slab One',serif;font-size:62px;line-height:1.05;text-transform:uppercase">Nine steps.<br>About four hours.</div>
+  </div>
+</section>
+<section data-label="M-01" data-speaker-notes="Step 1 lands." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;left:0;top:0;width:1920px;height:1080px;background:#F2C21B;clip-path:polygon(1200px 0,1920px 0,1920px 1080px,1120px 1080px,880px 232px)"></div>
+  <div style="position:absolute;left:var(--pad-x);top:200px;display:flex;flex-direction:column;gap:12px;width:900px">
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">01</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Spiritual Preparedness</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">02</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">03</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">04</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">05</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">06</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">07</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">08</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">09</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+  </div>
+  <div style="position:absolute;left:1220px;top:300px;width:600px;display:flex;flex-direction:column;justify-content:flex-start;gap:28px;color:#161412">
+    <div style="font:700 56px 'IBM Plex Mono',monospace;color:#161412;line-height:1">01</div>
+    <div style="font-family:'Alfa Slab One',serif;font-size:62px;line-height:1.05;text-transform:uppercase;text-wrap:pretty">Spiritual Preparedness</div>
+    <div style="font-size:40px;line-height:1.3;font-weight:500;text-wrap:pretty">Search your heart for what you bring in: biases, sin, struggles. Pray.</div>
+    <div style="font:700 30px 'IBM Plex Mono',monospace;color:#3A3328;letter-spacing:.06em">15 MIN</div>
+  </div>
+</section>
+<section data-label="M-02" data-speaker-notes="Step 2 lands." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;left:0;top:0;width:1920px;height:1080px;background:#F2C21B;clip-path:polygon(1200px 0,1920px 0,1920px 1080px,1120px 1080px,880px 308px)"></div>
+  <div style="position:absolute;left:var(--pad-x);top:200px;display:flex;flex-direction:column;gap:12px;width:900px">
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">01</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Spiritual Preparedness</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">02</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Read the Whole Letter</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">03</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">04</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">05</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">06</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">07</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">08</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">09</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+  </div>
+  <div style="position:absolute;left:1220px;top:300px;width:600px;display:flex;flex-direction:column;justify-content:flex-start;gap:28px;color:#161412">
+    <div style="font:700 56px 'IBM Plex Mono',monospace;color:#161412;line-height:1">02</div>
+    <div style="font-family:'Alfa Slab One',serif;font-size:62px;line-height:1.05;text-transform:uppercase;text-wrap:pretty">Read the Whole Letter</div>
+    <div style="font-size:40px;line-height:1.3;font-weight:500;text-wrap:pretty">In one sitting, before you study.</div>
+    <div style="font:700 30px 'IBM Plex Mono',monospace;color:#3A3328;letter-spacing:.06em">15 MIN</div>
+  </div>
+</section>
+<section data-label="M-03" data-speaker-notes="Step 3 lands." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;left:0;top:0;width:1920px;height:1080px;background:#F2C21B;clip-path:polygon(1200px 0,1920px 0,1920px 1080px,1120px 1080px,880px 384px)"></div>
+  <div style="position:absolute;left:var(--pad-x);top:200px;display:flex;flex-direction:column;gap:12px;width:900px">
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">01</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Spiritual Preparedness</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">02</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Read the Whole Letter</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">03</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Observations + Questions</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">04</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">05</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">06</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">07</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">08</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">09</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+  </div>
+  <div style="position:absolute;left:1220px;top:300px;width:600px;display:flex;flex-direction:column;justify-content:flex-start;gap:28px;color:#161412">
+    <div style="font:700 56px 'IBM Plex Mono',monospace;color:#161412;line-height:1">03</div>
+    <div style="font-family:'Alfa Slab One',serif;font-size:62px;line-height:1.05;text-transform:uppercase;text-wrap:pretty">Observations + Questions</div>
+    <div style="font-size:40px;line-height:1.3;font-weight:500;text-wrap:pretty">Verse by verse. Your questions become the job list.</div>
+    <div style="font:700 30px 'IBM Plex Mono',monospace;color:#3A3328;letter-spacing:.06em">30 MIN</div>
+  </div>
+</section>
+<section data-label="M-04" data-speaker-notes="Step 4 lands." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;left:0;top:0;width:1920px;height:1080px;background:#F2C21B;clip-path:polygon(1200px 0,1920px 0,1920px 1080px,1120px 1080px,880px 460px)"></div>
+  <div style="position:absolute;left:var(--pad-x);top:200px;display:flex;flex-direction:column;gap:12px;width:900px">
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">01</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Spiritual Preparedness</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">02</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Read the Whole Letter</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">03</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Observations + Questions</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">04</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Literary Context</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">05</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">06</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">07</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">08</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">09</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+  </div>
+  <div style="position:absolute;left:1220px;top:300px;width:600px;display:flex;flex-direction:column;justify-content:flex-start;gap:28px;color:#161412">
+    <div style="font:700 56px 'IBM Plex Mono',monospace;color:#161412;line-height:1">04</div>
+    <div style="font-family:'Alfa Slab One',serif;font-size:62px;line-height:1.05;text-transform:uppercase;text-wrap:pretty">Literary Context</div>
+    <div style="font-size:40px;line-height:1.3;font-weight:500;text-wrap:pretty">What precedes, what follows, how it fits the author’s flow.</div>
+    <div style="font:700 30px 'IBM Plex Mono',monospace;color:#3A3328;letter-spacing:.06em">20 MIN</div>
+  </div>
+</section>
+<section data-label="M-05" data-speaker-notes="Step 5 lands." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;left:0;top:0;width:1920px;height:1080px;background:#F2C21B;clip-path:polygon(1200px 0,1920px 0,1920px 1080px,1120px 1080px,880px 536px)"></div>
+  <div style="position:absolute;left:var(--pad-x);top:200px;display:flex;flex-direction:column;gap:12px;width:900px">
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">01</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Spiritual Preparedness</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">02</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Read the Whole Letter</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">03</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Observations + Questions</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">04</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Literary Context</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">05</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Historical Context</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">06</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">07</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">08</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">09</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+  </div>
+  <div style="position:absolute;left:1220px;top:300px;width:600px;display:flex;flex-direction:column;justify-content:flex-start;gap:28px;color:#161412">
+    <div style="font:700 56px 'IBM Plex Mono',monospace;color:#161412;line-height:1">05</div>
+    <div style="font-family:'Alfa Slab One',serif;font-size:62px;line-height:1.05;text-transform:uppercase;text-wrap:pretty">Historical Context</div>
+    <div style="font-size:40px;line-height:1.3;font-weight:500;text-wrap:pretty">Culture, time, place of writing.</div>
+    <div style="font:700 30px 'IBM Plex Mono',monospace;color:#3A3328;letter-spacing:.06em">20 MIN</div>
+  </div>
+</section>
+<section data-label="M-06" data-speaker-notes="Step 6 lands." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;left:0;top:0;width:1920px;height:1080px;background:#F2C21B;clip-path:polygon(1200px 0,1920px 0,1920px 1080px,1120px 1080px,880px 612px)"></div>
+  <div style="position:absolute;left:var(--pad-x);top:200px;display:flex;flex-direction:column;gap:12px;width:900px">
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">01</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Spiritual Preparedness</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">02</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Read the Whole Letter</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">03</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Observations + Questions</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">04</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Literary Context</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">05</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Historical Context</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">06</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Exegetical Dominant Thought</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">07</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">08</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">09</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+  </div>
+  <div style="position:absolute;left:1220px;top:300px;width:600px;display:flex;flex-direction:column;justify-content:flex-start;gap:28px;color:#161412">
+    <div style="font:700 56px 'IBM Plex Mono',monospace;color:#161412;line-height:1">06</div>
+    <div style="font-family:'Alfa Slab One',serif;font-size:62px;line-height:1.05;text-transform:uppercase;text-wrap:pretty">Exegetical Dominant Thought</div>
+    <div style="font-size:40px;line-height:1.3;font-weight:500;text-wrap:pretty">The point of the text in one sentence.</div>
+    <div style="font:700 30px 'IBM Plex Mono',monospace;color:#3A3328;letter-spacing:.06em">20 MIN</div>
+  </div>
+</section>
+<section data-label="M-07" data-speaker-notes="Step 7 lands." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;left:0;top:0;width:1920px;height:1080px;background:#F2C21B;clip-path:polygon(1200px 0,1920px 0,1920px 1080px,1120px 1080px,880px 688px)"></div>
+  <div style="position:absolute;left:var(--pad-x);top:200px;display:flex;flex-direction:column;gap:12px;width:900px">
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">01</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Spiritual Preparedness</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">02</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Read the Whole Letter</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">03</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Observations + Questions</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">04</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Literary Context</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">05</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Historical Context</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">06</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Exegetical Dominant Thought</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">07</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Commentary Research</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">08</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">09</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+  </div>
+  <div style="position:absolute;left:1220px;top:300px;width:600px;display:flex;flex-direction:column;justify-content:flex-start;gap:28px;color:#161412">
+    <div style="font:700 56px 'IBM Plex Mono',monospace;color:#161412;line-height:1">07</div>
+    <div style="font-family:'Alfa Slab One',serif;font-size:62px;line-height:1.05;text-transform:uppercase;text-wrap:pretty">Commentary Research</div>
+    <div style="font-size:40px;line-height:1.3;font-weight:500;text-wrap:pretty">Further perspective from trusted sources.</div>
+    <div style="font:700 30px 'IBM Plex Mono',monospace;color:#3A3328;letter-spacing:.06em">120 MIN</div>
+  </div>
+</section>
+<section data-label="M-08" data-speaker-notes="Step 8 lands." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;left:0;top:0;width:1920px;height:1080px;background:#F2C21B;clip-path:polygon(1200px 0,1920px 0,1920px 1080px,1120px 1080px,880px 764px)"></div>
+  <div style="position:absolute;left:var(--pad-x);top:200px;display:flex;flex-direction:column;gap:12px;width:900px">
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">01</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Spiritual Preparedness</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">02</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Read the Whole Letter</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">03</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Observations + Questions</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">04</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Literary Context</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">05</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Historical Context</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">06</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Exegetical Dominant Thought</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">07</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Commentary Research</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">08</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Draft Sermon Outline</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#6B7577">09</span><span style="height:12px;width:420px;background:#2A3133;border-radius:6px"></span></div>
+  </div>
+  <div style="position:absolute;left:1220px;top:300px;width:600px;display:flex;flex-direction:column;justify-content:flex-start;gap:28px;color:#161412">
+    <div style="font:700 56px 'IBM Plex Mono',monospace;color:#161412;line-height:1">08</div>
+    <div style="font-family:'Alfa Slab One',serif;font-size:62px;line-height:1.05;text-transform:uppercase;text-wrap:pretty">Draft Sermon Outline</div>
+    <div style="font-size:40px;line-height:1.3;font-weight:500;text-wrap:pretty">Dominant thought · intro · <br>2–3 main points · conclusion · illustrations · application.</div>
+    <div style="font:700 30px 'IBM Plex Mono',monospace;color:#3A3328;letter-spacing:.06em">60 MIN</div>
+  </div>
+</section>
+<section data-label="M-09" data-speaker-notes="Step 9 lands." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;left:0;top:0;width:1920px;height:1080px;background:#F2C21B;clip-path:polygon(1200px 0,1920px 0,1920px 1080px,1120px 1080px,880px 840px)"></div>
+  <div style="position:absolute;left:var(--pad-x);top:200px;display:flex;flex-direction:column;gap:12px;width:900px">
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">01</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Spiritual Preparedness</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">02</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Read the Whole Letter</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">03</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Observations + Questions</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">04</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Literary Context</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">05</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Historical Context</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">06</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Exegetical Dominant Thought</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">07</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Commentary Research</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#A9B4B6">08</span><span style="flex:1;font-size:var(--body);font-weight:500;color:#A9B4B6">Draft Sermon Outline</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">09</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Refine</span></div>
+  </div>
+  <div style="position:absolute;left:1220px;top:300px;width:600px;display:flex;flex-direction:column;justify-content:flex-start;gap:28px;color:#161412">
+    <div style="font:700 56px 'IBM Plex Mono',monospace;color:#161412;line-height:1">09</div>
+    <div style="font-family:'Alfa Slab One',serif;font-size:62px;line-height:1.05;text-transform:uppercase;text-wrap:pretty">Refine</div>
+    <div style="font-size:40px;line-height:1.3;font-weight:500;text-wrap:pretty">The earlier you can prepare the more time you have to refine.</div>
+    <div style="font:700 30px 'IBM Plex Mono',monospace;color:#3A3328;letter-spacing:.06em">ONGOING</div>
+  </div>
+</section>
+<section data-label="M-10" data-speaker-notes="Hold frame. All nine together with the time budget — this one gets photographed." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;left:var(--pad-x);top:200px;display:flex;flex-direction:column;gap:12px;width:900px">
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">01</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Spiritual Preparedness</span><span style="font:700 32px 'IBM Plex Mono',monospace;color:#A9B4B6">15 MIN</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">02</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Read the Whole Letter</span><span style="font:700 32px 'IBM Plex Mono',monospace;color:#A9B4B6">15 MIN</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">03</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Observations + Questions</span><span style="font:700 32px 'IBM Plex Mono',monospace;color:#A9B4B6">30 MIN</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">04</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Literary Context</span><span style="font:700 32px 'IBM Plex Mono',monospace;color:#A9B4B6">20 MIN</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">05</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Historical Context</span><span style="font:700 32px 'IBM Plex Mono',monospace;color:#A9B4B6">20 MIN</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">06</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Exegetical Dominant Thought</span><span style="font:700 32px 'IBM Plex Mono',monospace;color:#A9B4B6">20 MIN</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">07</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Commentary Research</span><span style="font:700 32px 'IBM Plex Mono',monospace;color:#A9B4B6">120 MIN</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">08</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Draft Sermon Outline</span><span style="font:700 32px 'IBM Plex Mono',monospace;color:#A9B4B6">60 MIN</span></div>
+    <div style="display:flex;gap:32px;align-items:center;height:64px"><span style="font:700 32px 'IBM Plex Mono',monospace;min-width:64px;color:#F2C21B">09</span><span style="flex:1;font-size:var(--body);font-weight:700;color:#EDE7DA">Refine</span><span style="font:700 32px 'IBM Plex Mono',monospace;color:#A9B4B6">ONGOING</span></div>
+  </div>
+  <div style="position:absolute;left:1180px;top:200px;width:580px;height:672px;display:flex;flex-direction:column;gap:10px">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#A9B4B6;letter-spacing:.08em;margin-bottom:6px">TIME · ≈ 5 HRS + REFINE</div>
+    <div style="flex:15;min-height:44px;background:#2A3133;border-radius:10px;display:flex;align-items:center;padding:0 24px;font:700 28px 'IBM Plex Mono',monospace;color:#EDE7DA;overflow:hidden;white-space:nowrap">01 · 15 MIN</div>
+    <div style="flex:15;min-height:44px;background:#2A3133;border-radius:10px;display:flex;align-items:center;padding:0 24px;font:700 28px 'IBM Plex Mono',monospace;color:#EDE7DA;overflow:hidden;white-space:nowrap">02 · 15 MIN</div>
+    <div style="flex:30;min-height:44px;background:#2A3133;border-radius:10px;display:flex;align-items:center;padding:0 24px;font:700 28px 'IBM Plex Mono',monospace;color:#EDE7DA;overflow:hidden;white-space:nowrap">03 · 30 MIN</div>
+    <div style="flex:20;min-height:44px;background:#2A3133;border-radius:10px;display:flex;align-items:center;padding:0 24px;font:700 28px 'IBM Plex Mono',monospace;color:#EDE7DA;overflow:hidden;white-space:nowrap">04 · 20 MIN</div>
+    <div style="flex:20;min-height:44px;background:#2A3133;border-radius:10px;display:flex;align-items:center;padding:0 24px;font:700 28px 'IBM Plex Mono',monospace;color:#EDE7DA;overflow:hidden;white-space:nowrap">05 · 20 MIN</div>
+    <div style="flex:20;min-height:44px;background:#2A3133;border-radius:10px;display:flex;align-items:center;padding:0 24px;font:700 28px 'IBM Plex Mono',monospace;color:#EDE7DA;overflow:hidden;white-space:nowrap">06 · 20 MIN</div>
+    <div style="flex:120;min-height:44px;background:#F2C21B;border-radius:10px;display:flex;align-items:center;padding:0 24px;font:700 28px 'IBM Plex Mono',monospace;color:#161412;overflow:hidden;white-space:nowrap">07 · 120 MIN</div>
+    <div style="flex:60;min-height:44px;background:#2A3133;border-radius:10px;display:flex;align-items:center;padding:0 24px;font:700 28px 'IBM Plex Mono',monospace;color:#EDE7DA;overflow:hidden;white-space:nowrap">08 · 60 MIN</div>
+  </div>
+</section>
+<section data-label="M-09b" data-speaker-notes="The nine steps as an eye chart. Lightbox flickers on; rows sharpen top to bottom." style="background:#0E1112;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,#2A2C2B 0%,#1A1D1D 40%,#0E1112 75%)"></div>
+  <div style="position:absolute;left:160px;top:50px;width:1600px;height:980px;box-sizing:border-box;background:linear-gradient(135deg,#4A4F50,#2C3132 40%,#1E2223);border-radius:6px;box-shadow:0 60px 120px rgba(0,0,0,.7),0 0 160px rgba(242,180,27,.28);padding:34px;animation-name:var(--anim-lightAnim,none);animation-duration:1.2s;animation-fill-mode:both">
+    <div style="position:relative;width:100%;height:100%;border-radius:3px;background:radial-gradient(ellipse at 50% 50%,#FFDC6E 0%,#FBC63A 45%,#E9A21E 85%,#C98B18 100%);box-shadow:inset 0 0 90px rgba(150,80,0,.45),inset 0 0 6px rgba(0,0,0,.6);display:flex;flex-direction:column;justify-content:space-between;padding:26px 0;overflow:hidden">
+    <div style="display:grid;grid-template-columns:110px 1fr 150px;align-items:center;padding:0 36px;border-top:none;animation-name:var(--anim-chartAnim,none);animation-duration:1.1s;animation-timing-function:cubic-bezier(.2,.7,.2,1);animation-delay:0.90s;animation-fill-mode:both"><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em">01</span><span style="font-family:'Alfa Slab One',serif;font-size:70px;line-height:1;text-transform:uppercase;letter-spacing:.05em;color:#161412;text-align:center;white-space:nowrap">Spiritual Preparedness</span><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em;text-align:right">15 MIN</span></div>
+    <div style="display:grid;grid-template-columns:110px 1fr 150px;align-items:center;padding:0 36px;border-top:2px solid rgba(60,30,0,.22);animation-name:var(--anim-chartAnim,none);animation-duration:1.1s;animation-timing-function:cubic-bezier(.2,.7,.2,1);animation-delay:1.45s;animation-fill-mode:both"><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em">02</span><span style="font-family:'Alfa Slab One',serif;font-size:72px;line-height:1;text-transform:uppercase;letter-spacing:.08em;color:#161412;text-align:center;white-space:nowrap">Read the Whole Letter</span><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em;text-align:right">15 MIN</span></div>
+    <div style="display:grid;grid-template-columns:110px 1fr 150px;align-items:center;padding:0 36px;border-top:2px solid rgba(60,30,0,.22);animation-name:var(--anim-chartAnim,none);animation-duration:1.1s;animation-timing-function:cubic-bezier(.2,.7,.2,1);animation-delay:2.00s;animation-fill-mode:both"><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em">03</span><span style="font-family:'Alfa Slab One',serif;font-size:62px;line-height:1;text-transform:uppercase;letter-spacing:.08em;color:#161412;text-align:center;white-space:nowrap">Observations + Questions</span><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em;text-align:right">30 MIN</span></div>
+    <div style="display:grid;grid-template-columns:110px 1fr 150px;align-items:center;padding:0 36px;border-top:2px solid rgba(60,30,0,.22);animation-name:var(--anim-chartAnim,none);animation-duration:1.1s;animation-timing-function:cubic-bezier(.2,.7,.2,1);animation-delay:2.55s;animation-fill-mode:both"><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em">04</span><span style="font-family:'Alfa Slab One',serif;font-size:54px;line-height:1;text-transform:uppercase;letter-spacing:.08em;color:#161412;text-align:center;white-space:nowrap">Literary Context</span><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em;text-align:right">20 MIN</span></div>
+    <div style="display:grid;grid-template-columns:110px 1fr 150px;align-items:center;padding:0 36px;border-top:2px solid rgba(60,30,0,.22);animation-name:var(--anim-chartAnim,none);animation-duration:1.1s;animation-timing-function:cubic-bezier(.2,.7,.2,1);animation-delay:3.10s;animation-fill-mode:both"><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em">05</span><span style="font-family:'Alfa Slab One',serif;font-size:47px;line-height:1;text-transform:uppercase;letter-spacing:.08em;color:#161412;text-align:center;white-space:nowrap">Historical Context</span><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em;text-align:right">20 MIN</span></div>
+    <div style="display:grid;grid-template-columns:110px 1fr 150px;align-items:center;padding:0 36px;border-top:2px solid rgba(60,30,0,.22);animation-name:var(--anim-chartAnim,none);animation-duration:1.1s;animation-timing-function:cubic-bezier(.2,.7,.2,1);animation-delay:3.65s;animation-fill-mode:both"><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em">06</span><span style="font-family:'Alfa Slab One',serif;font-size:41px;line-height:1;text-transform:uppercase;letter-spacing:.08em;color:#161412;text-align:center;white-space:nowrap">Exegetical Dominant Thought</span><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em;text-align:right">20 MIN</span></div>
+    <div style="display:grid;grid-template-columns:110px 1fr 150px;align-items:center;padding:0 36px;border-top:2px solid rgba(60,30,0,.22);animation-name:var(--anim-chartAnim,none);animation-duration:1.1s;animation-timing-function:cubic-bezier(.2,.7,.2,1);animation-delay:4.20s;animation-fill-mode:both"><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em">07</span><span style="font-family:'Alfa Slab One',serif;font-size:36px;line-height:1;text-transform:uppercase;letter-spacing:.08em;color:#161412;text-align:center;white-space:nowrap">Commentary Research</span><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em;text-align:right">120 MIN</span></div>
+    <div style="display:grid;grid-template-columns:110px 1fr 150px;align-items:center;padding:0 36px;border-top:2px solid rgba(60,30,0,.22);animation-name:var(--anim-chartAnim,none);animation-duration:1.1s;animation-timing-function:cubic-bezier(.2,.7,.2,1);animation-delay:4.75s;animation-fill-mode:both"><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em">08</span><span style="font-family:'Alfa Slab One',serif;font-size:31px;line-height:1;text-transform:uppercase;letter-spacing:.08em;color:#161412;text-align:center;white-space:nowrap">Draft Sermon Outline</span><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em;text-align:right">60 MIN</span></div>
+    <div style="display:grid;grid-template-columns:110px 1fr 150px;align-items:center;padding:0 36px;border-top:2px solid rgba(60,30,0,.22);animation-name:var(--anim-chartAnim,none);animation-duration:1.1s;animation-timing-function:cubic-bezier(.2,.7,.2,1);animation-delay:5.30s;animation-fill-mode:both"><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em">09</span><span style="font-family:'Alfa Slab One',serif;font-size:28px;line-height:1;text-transform:uppercase;letter-spacing:.08em;color:#161412;text-align:center;white-space:nowrap">Refine</span><span style="font:700 24px 'IBM Plex Mono',monospace;color:#5C3F08;letter-spacing:.08em;text-align:right">ONGOING</span></div>
+    </div>
+    <div style="position:absolute;left:14px;top:14px;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#8C9394,#3A4041)"></div>
+    <div style="position:absolute;right:14px;top:14px;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#8C9394,#3A4041)"></div>
+    <div style="position:absolute;left:14px;bottom:14px;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#8C9394,#3A4041)"></div>
+    <div style="position:absolute;right:14px;bottom:14px;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#8C9394,#3A4041)"></div>
+  </div>
+</section>
+<section data-label="PR-01" data-speaker-notes="Instruction. Stays up while they work." style="background:#F2C21B;color:#161412;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:center;gap:var(--gap-title)">
+  <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#161412;letter-spacing:.08em">LIVE PRACTICE</div>
+  <h2 style="margin:0;font-family:'Alfa Slab One',serif;font-size:103px;font-weight:400;line-height:1;letter-spacing:.01em;text-transform:uppercase">Read Philippians 2.</h2>
+  <p style="margin:0;font-size:var(--t2);font-weight:600;line-height:1.25;max-width:1400px;text-wrap:pretty">Write down your observations and your questions.</p>
+</section>
+<section data-label="PR-02" data-speaker-notes="Live countdown inside the lens. Click the time to start/pause; double-click resets to 15:00." style="background:#0E1314;color:#EDE7DA;font-family:'IBM Plex Mono',monospace;overflow:hidden">
+  <img src="assets/img/lens-letters.jpg" alt="Looking through a phoropter lens" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%">
+  <div data-timer="1" title="Click to start/pause · double-click to reset" style="position:absolute;left:945px;top:404px;width:160px;height:70px;background:#D9F3E6;box-shadow:0 0 10px 8px #D9F3E6;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:34px;font-weight:600;letter-spacing:.06em;color:#4F5B58;filter:blur(.3px)">
+    <span><span data-timer-text>15:00</span></span>
+    <span style="position:absolute;inset:-8px;background-image:url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'&gt;&lt;filter id='n'&gt;&lt;feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/&gt;&lt;feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/&gt;&lt;/filter&gt;&lt;rect width='100%' height='100%' filter='url(%23n)'/&gt;&lt;/svg&gt;&quot;);opacity:.35;mix-blend-mode:multiply;pointer-events:none"></span>
+  </div>
+</section>
+<section data-label="PR-04" data-speaker-notes="Quote setting." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:center;gap:var(--gap-title)">
+  <div style="width:160px;height:16px;background:#F2C21B;border-radius:8px"></div>
+  <p style="margin:0;font-size:64px;font-weight:600;line-height:1.2;max-width:1500px;text-wrap:pretty">When you dig back in, you can compare what you got on your own — before other voices shaped your thinking.</p>
+</section>
+<section data-label="PR-05" data-speaker-notes="Optional holding frame for discussion." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:center;gap:var(--gap-title)">
+  <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">LIVE PRACTICE</div>
+  <h2 style="margin:0;font-family:'Alfa Slab One',serif;font-size:103px;font-weight:400;line-height:1;letter-spacing:.01em;text-transform:uppercase">Discussion</h2>
+</section>
+<section data-label="PC-01" data-speaker-notes="Section marker." style="background:#0E1112;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <img src="assets/img/trial-lens-red.jpg" alt="A red trial lens held above a wooden lens case" style="position:absolute;top:0;bottom:0;right:0;width:800px;height:100%;object-fit:cover;object-position:50% 30%">
+  <div style="position:absolute;top:0;bottom:0;right:520px;width:360px;background:linear-gradient(to right,#0E1112 0%,rgba(14,17,18,.85) 40%,rgba(14,17,18,0) 100%)"></div>
+  <div style="position:absolute;left:var(--pad-x);top:0;bottom:0;width:960px;display:flex;flex-direction:column;justify-content:center;gap:var(--gap-title)">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">PRACTICAL</div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-family:'Alfa Slab One',serif;font-size:92px;font-weight:400;line-height:1.05;letter-spacing:.01em;text-transform:uppercase;color:#EDE7DA"><span>Input</span><span>Output</span><span>Constraints</span></div>
+  </div>
+</section>
+<section data-label="PC-02" data-speaker-notes="Input: growth." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:center;gap:var(--gap-title)">
+  <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">INPUT · GROWTH</div>
+  <h2 style="margin:0;font-size:80px;font-weight:700;line-height:1.15;max-width:1400px;text-wrap:pretty">How's your personal quiet time?</h2>
+  <h2 style="margin:0;font-size:80px;font-weight:700;line-height:1.15;max-width:1400px;text-wrap:pretty">How do you collect ideas?</h2>
+  <h2 style="margin:0;font-size:80px;font-weight:700;line-height:1.15;max-width:1400px;text-wrap:pretty">What sources are you listening to?</h2>
+</section>
+<section data-label="PC-04a" data-speaker-notes="Just the picture. Let them look." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <img src="assets/img/seas-satellite.jpg" alt="Satellite view of the Jordan valley: Sea of Galilee to the Dead Sea" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 0">
+  <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(17,21,22,.96) 0%,rgba(17,21,22,.85) 30%,rgba(17,21,22,.2) 55%,rgba(17,21,22,0) 70%);opacity:0"></div>
+  <svg data-om-raster="" viewBox="0 0 1920 1080" style="position:absolute;inset:0;width:1920px;height:1080px;opacity:0" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="1034" cy="168" r="60" fill="none" stroke="#F2C21B" stroke-width="5"></circle>
+    <path d="M1094 168 L 1170 168" fill="none" stroke="#F2C21B" stroke-width="4"></path>
+    <circle cx="1440" cy="760" r="60" fill="none" stroke="#A9B4B6" stroke-width="5"></circle>
+    <path d="M1380 760 L 1304 760" fill="none" stroke="#A9B4B6" stroke-width="4"></path>
+  </svg>
+  <div style="position:absolute;left:1186px;top:96px;width:700px;display:flex;flex-direction:column;gap:8px;text-align:left;white-space:nowrap;opacity:0;text-shadow:0 2px 10px rgba(0,0,0,.9)">
+    <div style="font-size:80px;font-weight:700;line-height:1.05">Sea of Galilee</div>
+    <div style="font:700 44px 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.1em;opacity:0">IN + OUT · ALIVE</div>
+  </div>
+  <div style="position:absolute;left:760px;top:686px;width:524px;display:flex;flex-direction:column;gap:8px;text-align:right;white-space:nowrap;opacity:0;text-shadow:0 2px 10px rgba(0,0,0,.9)">
+    <div style="font-size:80px;font-weight:700;line-height:1.05">Dead Sea</div>
+    <div style="font:700 44px 'IBM Plex Mono',monospace;color:#A9B4B6;letter-spacing:.1em;opacity:0">IN · NO OUT · DEAD</div>
+  </div>
+  <div style="position:absolute;left:var(--pad-x);top:var(--pad-top);width:560px;display:flex;flex-direction:column;gap:40px;opacity:0">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">OUTPUT · DISCIPLESHIP</div>
+    <h2 style="margin:0;font-family:'Alfa Slab One',serif;font-size:72px;font-weight:400;line-height:1.05;text-transform:uppercase;text-wrap:pretty">Same river. One lives, one dies.</h2>
+    <p style="margin:0;font-size:var(--body);line-height:1.3;font-weight:500;text-wrap:pretty">Galilee receives the Jordan and lets it go. The Dead Sea receives the same water and keeps every drop.</p>
+  </div>
+</section>
+<section data-label="PC-04b" data-speaker-notes="Name the two seas." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <img src="assets/img/seas-satellite.jpg" alt="Satellite view of the Jordan valley: Sea of Galilee to the Dead Sea" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 0">
+  <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(17,21,22,.96) 0%,rgba(17,21,22,.85) 30%,rgba(17,21,22,.2) 55%,rgba(17,21,22,0) 70%);opacity:0"></div>
+  <svg data-om-raster="" viewBox="0 0 1920 1080" style="position:absolute;inset:0;width:1920px;height:1080px" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="1034" cy="168" r="60" fill="none" stroke="#F2C21B" stroke-width="5"></circle>
+    <path d="M1094 168 L 1170 168" fill="none" stroke="#F2C21B" stroke-width="4"></path>
+    <circle cx="1440" cy="760" r="60" fill="none" stroke="#A9B4B6" stroke-width="5"></circle>
+    <path d="M1380 760 L 1304 760" fill="none" stroke="#A9B4B6" stroke-width="4"></path>
+  </svg>
+  <div style="position:absolute;left:1186px;top:96px;width:700px;display:flex;flex-direction:column;gap:8px;text-align:left;white-space:nowrap;text-shadow:0 2px 10px rgba(0,0,0,.9)">
+    <div style="font-size:80px;font-weight:700;line-height:1.05">Sea of Galilee</div>
+    <div style="font:700 44px 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.1em;opacity:0">IN + OUT · ALIVE</div>
+  </div>
+  <div style="position:absolute;left:760px;top:686px;width:524px;display:flex;flex-direction:column;gap:8px;text-align:right;white-space:nowrap;text-shadow:0 2px 10px rgba(0,0,0,.9)">
+    <div style="font-size:80px;font-weight:700;line-height:1.05">Dead Sea</div>
+    <div style="font:700 44px 'IBM Plex Mono',monospace;color:#A9B4B6;letter-spacing:.1em;opacity:0">IN · NO OUT · DEAD</div>
+  </div>
+  <div style="position:absolute;left:var(--pad-x);top:var(--pad-top);width:560px;display:flex;flex-direction:column;gap:40px;opacity:0">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">OUTPUT · DISCIPLESHIP</div>
+    <h2 style="margin:0;font-family:'Alfa Slab One',serif;font-size:72px;font-weight:400;line-height:1.05;text-transform:uppercase;text-wrap:pretty">Same river. One lives, one dies.</h2>
+    <p style="margin:0;font-size:var(--body);line-height:1.3;font-weight:500;text-wrap:pretty">Galilee receives the Jordan and lets it go. The Dead Sea receives the same water and keeps every drop.</p>
+  </div>
+</section>
+<section data-label="PC-04c" data-speaker-notes="Tags land: in and out lives; in with no out dies." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <img src="assets/img/seas-satellite.jpg" alt="Satellite view of the Jordan valley: Sea of Galilee to the Dead Sea" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 0">
+  <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(17,21,22,.96) 0%,rgba(17,21,22,.85) 30%,rgba(17,21,22,.2) 55%,rgba(17,21,22,0) 70%);opacity:0"></div>
+  <svg data-om-raster="" viewBox="0 0 1920 1080" style="position:absolute;inset:0;width:1920px;height:1080px" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="1034" cy="168" r="60" fill="none" stroke="#F2C21B" stroke-width="5"></circle>
+    <path d="M1094 168 L 1170 168" fill="none" stroke="#F2C21B" stroke-width="4"></path>
+    <circle cx="1440" cy="760" r="60" fill="none" stroke="#A9B4B6" stroke-width="5"></circle>
+    <path d="M1380 760 L 1304 760" fill="none" stroke="#A9B4B6" stroke-width="4"></path>
+  </svg>
+  <div style="position:absolute;left:1186px;top:96px;width:700px;display:flex;flex-direction:column;gap:8px;text-align:left;white-space:nowrap;text-shadow:0 2px 10px rgba(0,0,0,.9)">
+    <div style="font-size:80px;font-weight:700;line-height:1.05">Sea of Galilee</div>
+    <div style="font:700 44px 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.1em">IN + OUT · ALIVE</div>
+  </div>
+  <div style="position:absolute;left:760px;top:686px;width:524px;display:flex;flex-direction:column;gap:8px;text-align:right;white-space:nowrap;text-shadow:0 2px 10px rgba(0,0,0,.9)">
+    <div style="font-size:80px;font-weight:700;line-height:1.05">Dead Sea</div>
+    <div style="font:700 44px 'IBM Plex Mono',monospace;color:#A9B4B6;letter-spacing:.1em">IN · NO OUT · DEAD</div>
+  </div>
+  <div style="position:absolute;left:var(--pad-x);top:var(--pad-top);width:560px;display:flex;flex-direction:column;gap:40px;opacity:0">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">OUTPUT · DISCIPLESHIP</div>
+    <h2 style="margin:0;font-family:'Alfa Slab One',serif;font-size:72px;font-weight:400;line-height:1.05;text-transform:uppercase;text-wrap:pretty">Same river. One lives, one dies.</h2>
+    <p style="margin:0;font-size:var(--body);line-height:1.3;font-weight:500;text-wrap:pretty">Galilee receives the Jordan and lets it go. The Dead Sea receives the same water and keeps every drop.</p>
+  </div>
+</section>
+<section data-label="PC-04d" data-speaker-notes="Same river feeds both. Galilee has an outlet and lives; the Dead Sea has none. Input alone doesn't make you alive." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;overflow:hidden">
+  <img src="assets/img/seas-satellite.jpg" alt="Satellite view of the Jordan valley: Sea of Galilee to the Dead Sea" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 0">
+  <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(17,21,22,.96) 0%,rgba(17,21,22,.85) 30%,rgba(17,21,22,.2) 55%,rgba(17,21,22,0) 70%)"></div>
+  <svg data-om-raster="" viewBox="0 0 1920 1080" style="position:absolute;inset:0;width:1920px;height:1080px" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="1034" cy="168" r="60" fill="none" stroke="#F2C21B" stroke-width="5"></circle>
+    <path d="M1094 168 L 1170 168" fill="none" stroke="#F2C21B" stroke-width="4"></path>
+    <circle cx="1440" cy="760" r="60" fill="none" stroke="#A9B4B6" stroke-width="5"></circle>
+    <path d="M1380 760 L 1304 760" fill="none" stroke="#A9B4B6" stroke-width="4"></path>
+  </svg>
+  <div style="position:absolute;left:1186px;top:96px;width:700px;display:flex;flex-direction:column;gap:8px;text-align:left;white-space:nowrap;text-shadow:0 2px 10px rgba(0,0,0,.9)">
+    <div style="font-size:80px;font-weight:700;line-height:1.05">Sea of Galilee</div>
+    <div style="font:700 44px 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.1em">IN + OUT · ALIVE</div>
+  </div>
+  <div style="position:absolute;left:760px;top:686px;width:524px;display:flex;flex-direction:column;gap:8px;text-align:right;white-space:nowrap;text-shadow:0 2px 10px rgba(0,0,0,.9)">
+    <div style="font-size:80px;font-weight:700;line-height:1.05">Dead Sea</div>
+    <div style="font:700 44px 'IBM Plex Mono',monospace;color:#A9B4B6;letter-spacing:.1em">IN · NO OUT · DEAD</div>
+  </div>
+  <div style="position:absolute;left:var(--pad-x);top:var(--pad-top);width:560px;display:flex;flex-direction:column;gap:40px">
+    <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">OUTPUT · DISCIPLESHIP</div>
+    <h2 style="margin:0;font-family:'Alfa Slab One',serif;font-size:72px;font-weight:400;line-height:1.05;text-transform:uppercase;text-wrap:pretty">Same river. One lives, one dies.</h2>
+    <p style="margin:0;font-size:var(--body);line-height:1.3;font-weight:500;text-wrap:pretty">Galilee receives the Jordan and lets it go. The Dead Sea receives the same water and keeps every drop.</p>
+  </div>
+</section>
+<section data-label="PC-05" data-speaker-notes="Quote setting." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:center;gap:var(--gap-title)">
+  <div style="width:160px;height:16px;background:#F2C21B;border-radius:8px"></div>
+  <p style="margin:0;font-size:80px;font-weight:600;line-height:1.15;max-width:1500px;text-wrap:pretty">I had to read the Bible for myself in order to give it away.</p>
+</section>
+<section data-label="PC-06" data-speaker-notes="Constraints, question one." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:flex-start;gap:var(--gap-title);padding-top:240px">
+  <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">CONSTRAINTS</div>
+  <h2 style="margin:0;font-size:80px;font-weight:700;line-height:1.15;max-width:1500px;text-wrap:pretty">What do you do when the needs of the people leave no time to prepare?</h2>
+</section>
+<section data-label="PC-07" data-speaker-notes="Constraints, question two." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:flex-start;gap:var(--gap-title);padding-top:240px">
+  <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">CONSTRAINTS</div>
+  <h2 style="margin:0;font-size:80px;font-weight:700;line-height:1.15;max-width:1500px;text-wrap:pretty">What do you do when your personal needs are greater than the ministry needs?</h2>
+</section>
+<section data-label="PC-08" data-speaker-notes="Constraints, question three. Exegetical vs. topical preaching." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:flex-start;gap:var(--gap-title);padding-top:240px">
+  <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">CONSTRAINTS</div>
+  <h2 style="margin:0;font-size:80px;font-weight:700;line-height:1.15;max-width:1500px;text-wrap:pretty">What do you do when you have no control over the direction — and you disagree with it?</h2>
+  <div style="font-size:var(--body);font-weight:500;color:#A9B4B6">Exegetical vs. topical preaching</div>
+</section>
+<section data-label="PC-10" data-speaker-notes="Four needs, 4 Chair framework." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:center;gap:64px">
+  <h2 style="margin:0;font-size:72px;font-weight:700;line-height:1.15;max-width:1560px;text-wrap:pretty">Learning to exegete the people will help you exegete the text.</h2>
+  <div style="display:flex;gap:28px">
+    <div style="flex:1;background:#1E2426;border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:20px"><div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">CHAIR 1</div><div style="font-size:var(--body);font-weight:600;line-height:1.25">A new believer</div></div>
+    <div style="flex:1;background:#1E2426;border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:20px"><div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">CHAIR 2</div><div style="font-size:var(--body);font-weight:600;line-height:1.25">A stuck follower</div></div>
+    <div style="flex:1;background:#1E2426;border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:20px"><div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">CHAIR 3</div><div style="font-size:var(--body);font-weight:600;line-height:1.25">A prideful worker</div></div>
+    <div style="flex:1;background:#1E2426;border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:20px"><div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#F2C21B;letter-spacing:.08em">CHAIR 4</div><div style="font-size:var(--body);font-weight:600;line-height:1.25">A hopeless disciple-maker</div></div>
+  </div>
+</section>
+<section data-label="PC-11" data-speaker-notes="Common mistakes; three beats build in. Amber lives only here and on the wrong lenses." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:center;gap:48px">
+  <h2 style="margin:0;font-size:var(--t1);font-weight:400;line-height:1;letter-spacing:.01em;color:#C0392B">Common mistakes</h2>
+  <div style="display:flex;flex-direction:column;gap:32px;margin-top:16px">
+    <div style="display:flex;gap:40px;align-items:baseline"><span style="font:700 var(--body) 'IBM Plex Mono',monospace;color:#C0392B;min-width:72px">01</span><span style="font-size:44px;font-weight:600;line-height:1.25;max-width:1400px;text-wrap:pretty">We read other people's work before letting God work on us.</span></div>
+    <div style="display:flex;gap:40px;align-items:baseline"><span style="font:700 var(--body) 'IBM Plex Mono',monospace;color:#C0392B;min-width:72px">02</span><span style="font-size:44px;font-weight:600;line-height:1.25;max-width:1400px;text-wrap:pretty">We lose perspective on the fruit and feel only the burden.</span></div>
+    <div style="display:flex;gap:40px;align-items:baseline"><span style="font:700 var(--body) 'IBM Plex Mono',monospace;color:#C0392B;min-width:72px">03</span><span style="font-size:44px;font-weight:600;line-height:1.25;max-width:1400px;text-wrap:pretty">We chase the right formula and the right tools instead of enjoying being in God's Word.</span></div>
+  </div>
+</section>
+<section data-label="TL-01" data-speaker-notes="The tool belt is the prop. Slides stay plain." style="background:#F2C21B;color:#161412;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:center;gap:var(--gap-title)">
+  <div style="font:700 var(--mono) 'IBM Plex Mono',monospace;color:#161412;letter-spacing:.08em">TOOLS</div>
+  <div style="display:flex;flex-direction:column;gap:28px;font-size:var(--t2);font-weight:700;line-height:1.2">
+    <div style="display:flex;gap:40px;align-items:baseline"><span style="font:700 32px 'IBM Plex Mono',monospace;color:#3A3328;min-width:64px">01</span><span>Life Application Study Bible</span></div>
+    <div style="display:flex;gap:40px;align-items:baseline"><span style="font:700 32px 'IBM Plex Mono',monospace;color:#3A3328;min-width:64px">02</span><span>Commentaries</span></div>
+    <div style="display:flex;gap:40px;align-items:baseline"><span style="font:700 32px 'IBM Plex Mono',monospace;color:#3A3328;min-width:64px">03</span><span>The 9 genre worksheets</span><span style="font-size:var(--small);font-weight:500;color:#3A3328">credit: Cino</span></div>
+    <div style="display:flex;gap:40px;align-items:baseline"><span style="font:700 32px 'IBM Plex Mono',monospace;color:#3A3328;min-width:64px">04</span><span>Blue Letter Bible</span></div>
+    <div style="display:flex;gap:40px;align-items:baseline"><span style="font:700 32px 'IBM Plex Mono',monospace;color:#3A3328;min-width:64px">05</span><span>Logos</span></div>
+  </div>
+</section>
+<section data-label="TL-02" data-speaker-notes="Quote setting." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:center;gap:var(--gap-title)">
+  <div style="width:160px;height:16px;background:#F2C21B;border-radius:8px"></div>
+  <p style="margin:0;font-size:64px;font-weight:600;line-height:1.2;max-width:1560px;text-wrap:pretty">You will always have more tools at your disposal than necessary. Your job is to know which tool on your belt is needed, and when.</p>
+</section>
+</div></div>
+<div id="black"></div>
+<div id="hud"></div>
+<script>
+/* "Better One, or Two?" — presenter runtime. No dependencies. */
+(() => {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+  const stage = $('#stage');
+  const slides = $$('#stage > section');
+  const labels = slides.map(s => s.getAttribute('data-label'));
+  const hud = $('#hud');
+  const black = $('#black');
+
+  // Frames that crossfade in (section openers). Everything else hard-cuts.
+  const FADE = new Set(['T-01', 'DF-00', 'MO-01', 'PC-01', 'TL-01']);
+
+  // In-slide animations, replayed on arrival (mirrors CD's renderVals()).
+  const ANIM = {
+    'D-00a2': { flipBackAnim: 'flipBack' },
+    'D-00a3': { flipFwdAnim: 'flipFwd', flipFwd2Anim: 'flipFwd2' },
+    'M-09b': { chartAnim: 'chartRow', lightAnim: 'lightOn' },
+  };
+  const ANIM_VARS = ['flipBackAnim', 'flipFwdAnim', 'flipFwd2Anim', 'chartAnim', 'lightAnim'];
+
+  // Phoropter run. blur = target blur of the chart text on that frame.
+  const LENS = {
+    'P-00b': { clicks: [0, 650] },                       // "better one… or two?"
+    'P-00d': { clicks: [0], spin: 1 },                   // blank lens drops in
+    'P2-01': { clicks: [0, 115, 235], spin: 1, blur: 14, from: 22, fade: true },
+    'P2-02': { clicks: [0, 115, 235], spin: 1, blur: 6, from: 14 },
+    'P2-03': { clicks: [0, 115, 235], spin: 1, blur: 0, from: 6, snap: true },
+  };
+
+  /* ---------- scaling ---------- */
+  function fit() {
+    const w = window.innerWidth, h = window.innerHeight;
+    const s = Math.min(w / 1920, h / 1080);
+    stage.style.transform = `scale(${s})`;
+    stage.style.marginLeft = stage.style.marginTop = '0';
+  }
+  window.addEventListener('resize', fit);
+  fit();
+
+  /* ---------- audio ---------- */
+  const audio = {
+    ctx: null, muted: false, unlocked: false, sample: null, master: null,
+    unlock() {
+      if (this.unlocked) return;
+      try {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        this.ctx = new AC();
+        this.master = this.ctx.createGain();
+        this.master.gain.value = 0.6;
+        this.master.connect(this.ctx.destination);
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        this.unlocked = true;
+      } catch (e) { /* no audio available */ }
+      updateHud();
+    },
+    click(t = 0) {
+      if (this.muted) return;
+      if (this.sample) {
+        setTimeout(() => { const a = this.sample.cloneNode(); a.volume = 0.9; a.play().catch(() => {}); }, t);
+        return;
+      }
+      if (!this.ctx) return;
+      synthClick(this.ctx, this.master, this.ctx.currentTime + t / 1000 + Math.random() * 0.012);
+    },
+  };
+  // One phoropter detent: low mechanical thunk + metal tick + faint carrier ring. ~60ms.
+  function synthClick(c, dest, at) {
+    const det = 1 + (Math.random() - 0.5) * 0.12; // ±6% pitch drift so detents don't machine-gun
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = 'triangle'; o.frequency.setValueAtTime(190 * det, at);
+    o.frequency.exponentialRampToValueAtTime(70 * det, at + 0.05);
+    g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(0.55, at + 0.003);
+    g.gain.exponentialRampToValueAtTime(0.0001, at + 0.055);
+    o.connect(g).connect(dest); o.start(at); o.stop(at + 0.07);
+    const len = Math.floor(c.sampleRate * 0.02), buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.2);
+    const n = c.createBufferSource(), hp = c.createBiquadFilter(), ng = c.createGain();
+    n.buffer = buf; hp.type = 'highpass'; hp.frequency.value = 2200;
+    ng.gain.setValueAtTime(0.42, at); ng.gain.exponentialRampToValueAtTime(0.0001, at + 0.02);
+    n.connect(hp).connect(ng).connect(dest); n.start(at);
+    const r = c.createOscillator(), rg = c.createGain();
+    r.type = 'sine'; r.frequency.value = 2600 * det;
+    rg.gain.setValueAtTime(0.0001, at + 0.004); rg.gain.exponentialRampToValueAtTime(0.07, at + 0.006);
+    rg.gain.exponentialRampToValueAtTime(0.0001, at + 0.04);
+    r.connect(rg).connect(dest); r.start(at); r.stop(at + 0.05);
+  }
+  window.__synthClick = synthClick; // exposed for the offline preview render
+  // Optional recorded sample: drop assets/sfx/click.wav next to the deck and it replaces the synth.
+  (() => {
+    const a = new Audio('assets/sfx/click.wav');
+    a.preload = 'auto';
+    a.addEventListener('canplaythrough', () => { audio.sample = a; }, { once: true });
+    a.addEventListener('error', () => { audio.sample = null; }, { once: true });
+  })();
+
+  /* ---------- HUD ---------- */
+  let hudTimer = null;
+  function updateHud() {
+    const parts = [`<span class="k">${cur + 1}</span>/${slides.length}`, `<span>${labels[cur]}</span>`];
+    if (!audio.unlocked) parts.push('<span class="warn">press any key to arm sound</span>');
+    else if (audio.muted) parts.push('<span class="warn">muted</span>');
+    if (timer.running) parts.push(`<span class="k">⏱ ${fmt(timer.remaining)}</span>`);
+    hud.innerHTML = parts.join('<span style="opacity:.35">·</span>');
+  }
+  function showHud(ms = 1800) {
+    updateHud(); hud.classList.add('show');
+    clearTimeout(hudTimer); hudTimer = setTimeout(() => hud.classList.remove('show'), ms);
+  }
+  window.addEventListener('mousemove', () => showHud(1400));
+
+  /* ---------- countdown ---------- */
+  const timer = { remaining: 15 * 60, running: false, id: null };
+  const fmt = r => `${String(Math.floor(r / 60)).padStart(2, '0')}:${String(r % 60).padStart(2, '0')}`;
+  function paintTimer() { $$('[data-timer-text]').forEach(e => e.textContent = fmt(timer.remaining)); }
+  function tick() {
+    if (timer.remaining > 0) timer.remaining--;
+    paintTimer();
+    if (timer.remaining === 0) { timer.running = false; clearInterval(timer.id); timer.id = null; }
+  }
+  timer.toggle = () => {
+    timer.running = !timer.running;
+    if (timer.running) { if (!timer.id) timer.id = setInterval(tick, 1000); }
+    else { clearInterval(timer.id); timer.id = null; }
+    showHud(1200);
+  };
+  timer.reset = () => { timer.running = false; clearInterval(timer.id); timer.id = null; timer.remaining = 15 * 60; paintTimer(); showHud(1200); };
+  $$('[data-timer]').forEach(el => {
+    let clicks = 0;
+    el.addEventListener('click', () => { clicks++; setTimeout(() => { if (clicks === 1) timer.toggle(); clicks = 0; }, 260); });
+    el.addEventListener('dblclick', e => { e.preventDefault(); clicks = 0; timer.reset(); });
+  });
+  paintTimer();
+
+  /* ---------- in-slide animations ---------- */
+  function armAnimations(sec, label) {
+    ANIM_VARS.forEach(v => sec.style.removeProperty('--anim-' + v));
+    const map = ANIM[label]; if (!map) return;
+    void sec.offsetWidth; // reflow so the animation restarts on re-entry
+    Object.entries(map).forEach(([v, name]) => sec.style.setProperty('--anim-' + v, name));
+  }
+  function disarmAnimations(sec) { ANIM_VARS.forEach(v => sec.style.removeProperty('--anim-' + v)); }
+
+  /* ---------- phoropter scene ---------- */
+  function lensEnter(sec, label, dir) {
+    const cfg = LENS[label]; if (!cfg) return;
+    // 1. detent clicks
+    cfg.clicks.forEach(t => audio.click(t));
+    // 2. lens carrier indexes: rim layers rotate in from -36° (or +36° going back), easing out over the detents
+    if (cfg.spin) {
+      const rims = $$('[data-rim]', sec);
+      const start = (dir < 0 ? 36 : -36);
+      rims.forEach(r => { r.style.transition = 'none'; r.style.transform = `rotate(${start}deg)`; });
+      void sec.offsetWidth;
+      rims.forEach(r => { r.style.transition = 'transform .62s cubic-bezier(.16,.84,.3,1)'; r.style.transform = 'rotate(0deg)'; });
+    }
+    // 3. chart text eases toward (or away from) focus
+    const chart = $('[data-chart]', sec);
+    if (chart && cfg.blur !== undefined) {
+      const from = dir < 0 ? (cfg.next ?? cfg.blur) : cfg.from;
+      chart.style.transition = 'none';
+      chart.style.filter = `blur(${from}px)`;
+      if (cfg.fade) chart.style.opacity = '0';
+      void sec.offsetWidth;
+      const ease = cfg.snap ? 'cubic-bezier(.7,0,.25,1) .46s' : 'cubic-bezier(.2,.7,.2,1) .72s';
+      chart.style.transition = `filter ${ease}, opacity .5s ease`;
+      chart.style.filter = `blur(${cfg.blur}px)`;
+      chart.style.opacity = '1';
+    }
+    // 4. label rises in
+    if ($('[data-lenslabel]', sec)) {
+      sec.classList.add('lens-enter'); void sec.offsetWidth;
+      requestAnimationFrame(() => sec.classList.add('lens-go'));
+    }
+  }
+  function lensLeave(sec) { sec.classList.remove('lens-enter', 'lens-go'); }
+  // when stepping backwards, the "from" blur is the *next* frame's target
+  LENS['P2-01'].next = 6; LENS['P2-02'].next = 0; LENS['P2-03'].next = 0;
+
+  /* ---------- navigation ---------- */
+  let cur = -1;
+  function go(n, dir = 1) {
+    n = Math.max(0, Math.min(slides.length - 1, n));
+    if (n === cur) return;
+    const prev = cur >= 0 ? slides[cur] : null, next = slides[n], label = labels[n];
+    cur = n;
+    if (prev) {
+      disarmAnimations(prev); lensLeave(prev);
+      prev.classList.remove('on', 'entering');
+      if (FADE.has(label)) {
+        prev.classList.add('leaving');
+        setTimeout(() => prev.classList.remove('leaving'), 420);
+      }
+    }
+    next.classList.add('on');
+    if (FADE.has(label) && prev) { next.classList.add('entering'); setTimeout(() => next.classList.remove('entering'), 420); }
+    armAnimations(next, label);
+    lensEnter(next, label, dir);
+    history.replaceState(null, '', '#' + (n + 1));
+    showHud();
+  }
+  const fromHash = () => { const h = parseInt(location.hash.slice(1), 10); return isNaN(h) ? 0 : h - 1; };
+
+  document.addEventListener('keydown', e => {
+    if (!audio.unlocked) audio.unlock();
+    const k = e.key;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    switch (k) {
+      case 'ArrowRight': case 'ArrowDown': case 'PageDown': case ' ': case 'Enter': case 'n': e.preventDefault(); go(cur + 1, 1); break;
+      case 'ArrowLeft': case 'ArrowUp': case 'PageUp': case 'Backspace': case 'p': e.preventDefault(); go(cur - 1, -1); break;
+      case 'Home': go(0, -1); break;
+      case 'End': go(slides.length - 1, 1); break;
+      case 'f': case 'F': toggleFull(); break;
+      case 'b': case 'B': case '.': black.classList.toggle('on'); break;
+      case 'm': case 'M': audio.muted = !audio.muted; showHud(1200); break;
+      case 't': timer.toggle(); break;
+      case 'T': timer.reset(); break;
+      case 'r': case 'R': if (e.shiftKey) go(0, -1); break;
+      case 'Escape': black.classList.remove('on'); break;
+      case '?': showHud(6000); break;
+      default:
+        if (/^[0-9]$/.test(k)) { // type a number then Enter? keep it simple: digits jump to 1–9 sections is noise; ignore
+        }
+    }
+  });
+  document.addEventListener('pointerdown', e => {
+    if (!audio.unlocked) audio.unlock();
+    if (e.target.closest('[data-timer]')) return;
+    // tap left/right half to navigate (touch or mouse)
+    if (e.pointerType === 'touch' || e.button === 0) {
+      if (e.clientX > window.innerWidth / 2) go(cur + 1, 1); else go(cur - 1, -1);
+    }
+  });
+  function toggleFull() {
+    const el = document.documentElement;
+    if (!document.fullscreenElement) (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+    else (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+  }
+  window.addEventListener('hashchange', () => { const n = fromHash(); if (n !== cur) go(n, n > cur ? 1 : -1); });
+
+  go(fromHash(), 1);
+  showHud(4000);
+})();
+
+</script>
+</body>
+</html>

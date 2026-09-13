@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Presenter — Better One, or Two?</title>
+<style>
+:root{--ink:#EDE7DA;--dim:#A9B4B6;--mute:#6B7577;--y:#F2C21B;--g0:#0B0F10;--g1:#111516;--g2:#1E2426;--g3:#2A3133}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--g0);color:var(--ink);font:500 15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;overflow:hidden}
+#app{display:grid;grid-template-rows:64px 1fr 44px;height:100vh}
+header{display:flex;align-items:center;gap:18px;padding:0 20px;background:var(--g1);border-bottom:1px solid var(--g3)}
+header .title{font-weight:800;letter-spacing:.02em}
+header .title small{color:var(--dim);font-weight:500;margin-left:8px}
+header .sp{flex:1}
+.stat{display:flex;flex-direction:column;align-items:flex-end;line-height:1.1}
+.stat b{font-size:22px;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.stat span{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.12em}
+.stat.cd b{color:var(--y)}
+.stat.cd.off b{color:var(--mute)}
+button{background:var(--g2);color:var(--ink);border:1px solid var(--g3);border-radius:8px;padding:8px 12px;font:600 13px/1 inherit;cursor:pointer}
+button:hover{background:var(--g3)}
+button.y{background:var(--y);color:#161412;border-color:var(--y)}
+button.y:hover{filter:brightness(1.06)}
+button kbd{margin-left:6px;opacity:.55;font:inherit;font-weight:500}
+main{display:grid;grid-template-columns:minmax(0,1.62fr) minmax(320px,1fr);gap:16px;padding:16px;min-height:0}
+.pane{display:flex;flex-direction:column;min-height:0;gap:8px}
+.lab{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.14em;display:flex;justify-content:space-between}
+.lab b{color:var(--y);letter-spacing:.06em}
+.frame{position:relative;width:100%;aspect-ratio:16/9;background:#000;border:1px solid var(--g3);border-radius:8px;overflow:hidden}
+.frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#0B0F10}
+.frame.black::after{content:"BLACK";position:absolute;inset:0;background:#000;color:var(--mute);display:flex;align-items:center;justify-content:center;letter-spacing:.3em;font-size:12px}
+.right{display:grid;grid-template-rows:auto 1fr;gap:12px;min-height:0}
+#notes{flex:1;min-height:0;overflow:auto;background:var(--g1);border:1px solid var(--g3);border-radius:8px;padding:16px 18px;font-size:19px;line-height:1.5;white-space:pre-wrap;outline:none}
+#notes:focus{border-color:var(--y)}
+#notes:empty::before{content:"No notes for this frame — click to type. Saved on this Mac.";color:var(--mute)}
+footer{display:flex;align-items:center;gap:22px;padding:0 20px;background:var(--g1);border-top:1px solid var(--g3);font-size:12px;color:var(--dim);white-space:nowrap;overflow:hidden}
+footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;padding:1px 6px;color:var(--ink);font:600 11px/1.6 inherit;margin-right:4px}
+#audstate{font-size:12px;color:var(--mute)}
+#audstate.ok{color:#7CC48F}
+#start{position:fixed;inset:0;background:rgba(11,15,16,.92);display:flex;align-items:center;justify-content:center;z-index:50}
+#start>div{background:var(--g1);border:2px solid var(--y);border-radius:16px;padding:32px 40px;max-width:640px;font-size:16px;line-height:1.55}
+#start h2{margin:0 0 12px;font-size:22px}
+#start ol{margin:14px 0 20px;padding-left:22px}
+#start li{margin:6px 0}
+#start .row{display:flex;gap:10px;align-items:center}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="title">Better One, or Two? <small>presenter</small></div>
+    <span id="audstate">audience window: not open</span>
+    <div class="sp"></div>
+    <div class="stat"><b id="counter">1 / 54</b><span id="label">—</span></div>
+    <div class="stat"><b id="elapsed">00:00</b><span>in talk</span></div>
+    <div class="stat cd off"><b id="cd">15:00</b><span>practice timer</span></div>
+    <div class="stat"><b id="clock">--:--</b><span>clock</span></div>
+    <button id="btnAud" class="y">Open audience window</button>
+    <button id="btnBlack">Black<kbd>B</kbd></button>
+    <button id="btnMute">Mute<kbd>M</kbd></button>
+    <button id="btnTimer">Timer<kbd>t</kbd></button>
+  </header>
+  <main>
+    <div class="pane">
+      <div class="lab"><span>Now · what the room sees</span><b id="nowLabel"></b></div>
+      <div class="frame" id="nowFrame"><iframe id="mirror" title="current slide"></iframe></div>
+    </div>
+    <div class="pane right">
+      <div class="pane">
+        <div class="lab"><span>Next</span><b id="nextLabel"></b></div>
+        <div class="frame"><iframe id="next" title="next slide"></iframe></div>
+      </div>
+      <div class="pane">
+        <div class="lab"><span>Notes</span><span id="notesSrc"></span></div>
+        <div id="notes" contenteditable="true" spellcheck="false"></div>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <span><kbd>→</kbd><kbd>space</kbd> next</span><span><kbd>←</kbd> back</span><span><kbd>B</kbd> black</span><span><kbd>M</kbd> mute clicks</span><span><kbd>t</kbd> timer</span><span><kbd>⇧T</kbd> reset timer</span><span><kbd>Home</kbd> first</span><span>Sound plays in the audience window only.</span>
+  </footer>
+</div>
+<div id="start">
+  <div>
+    <h2>Presenter mode</h2>
+    <ol>
+      <li><b>Open the audience window</b> below, then drag it onto the TV.</li>
+      <li><b>Click once inside it</b> — that fills the TV screen and turns on the phoropter sound.</li>
+      <li>Come back to this window. Your clicker and arrow keys work from here.</li>
+    </ol>
+    <div class="row"><button id="btnStart" class="y">Open audience window</button><button id="btnSkip">I'll do it later</button></div>
+  </div>
+</div>
+<script src="notes.js"></script>
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const D = window.DECK || { labels: [], notes: {} };
+  const total = D.labels.length;
+  let cur = Math.max(0, Math.min(total - 1, (parseInt(location.hash.slice(1), 10) || 1) - 1));
+  let aud = null, black = false, muted = false, startedAt = null;
+  const mirror = $('#mirror'), next = $('#next');
+  const src = (role, n) => `index.html?role=${role}#${n + 1}`;
+  mirror.src = src('mirror', cur);
+  next.src = src('preview', Math.min(cur + 1, total - 1));
+
+  const post = (w, msg) => { try { w && w.postMessage({ deck: msg }, '*'); } catch (e) {} };
+  const audWin = () => (aud && !aud.closed) ? aud : null;
+  const all = (msg, except) => {
+    if (mirror.contentWindow !== except) post(mirror.contentWindow, msg);
+    const a = audWin(); if (a && a !== except) post(a, msg);
+  };
+
+  /* notes: notes.js defaults, overridden per-label by what you type (localStorage) */
+  const notesEl = $('#notes');
+  const key = l => 'bo2.notes.' + l;
+  function loadNotes(label) {
+    let saved = null; try { saved = localStorage.getItem(key(label)); } catch (e) {}
+    notesEl.textContent = saved != null ? saved : (D.notes[label] || '');
+    $('#notesSrc').textContent = saved != null ? 'edited here' : (D.notes[label] ? 'from notes.js' : '');
+  }
+  notesEl.addEventListener('input', () => { try { localStorage.setItem(key(D.labels[cur]), notesEl.textContent); $('#notesSrc').textContent = 'edited here'; } catch (e) {} });
+  notesEl.addEventListener('keydown', e => e.stopPropagation()); // typing in notes must not drive the deck
+
+  function paint() {
+    $('#counter').textContent = `${cur + 1} / ${total}`;
+    $('#label').textContent = D.labels[cur] || '';
+    $('#nowLabel').textContent = D.labels[cur] || '';
+    $('#nextLabel').textContent = cur + 1 < total ? D.labels[cur + 1] : 'end';
+    history.replaceState(null, '', '#' + (cur + 1));
+    loadNotes(D.labels[cur]);
+  }
+  function go(n, dir, except) {
+    n = Math.max(0, Math.min(total - 1, n));
+    if (n === cur && except === undefined) return;
+    if (dir == null) dir = n >= cur ? 1 : -1;
+    cur = n;
+    if (startedAt == null && cur > 0) startedAt = Date.now();
+    all({ type: 'go', n, dir }, except);
+    post(next.contentWindow, { type: 'go', n: Math.min(n + 1, total - 1), dir: 1 });
+    paint();
+  }
+
+  /* timer — the console owns it and broadcasts every second */
+  const T = { remaining: 15 * 60, running: false, id: null };
+  const fmt = r => `${String(Math.floor(r / 60)).padStart(2, '0')}:${String(r % 60).padStart(2, '0')}`;
+  function bcastTimer() { all({ type: 'timer', remaining: T.remaining, running: T.running }); $('#cd').textContent = fmt(T.remaining); $('#cd').parentElement.classList.toggle('off', !T.running); $('#btnTimer').firstChild.nodeValue = T.running ? 'Pause' : 'Timer'; }
+  function timerCmd(cmd) {
+    if (cmd === 'toggle') {
+      T.running = !T.running;
+      if (T.running && !T.id) T.id = setInterval(() => { if (T.remaining > 0) T.remaining--; if (T.remaining === 0) { T.running = false; clearInterval(T.id); T.id = null; } bcastTimer(); }, 1000);
+      if (!T.running) { clearInterval(T.id); T.id = null; }
+    } else if (cmd === 'reset') { T.running = false; clearInterval(T.id); T.id = null; T.remaining = 15 * 60; }
+    bcastTimer();
+  }
+
+  /* messages from the audience window and the iframes */
+  window.addEventListener('message', e => {
+    const m = e.data && e.data.deck; if (!m) return;
+    // adopt the audience window if this console was reloaded and lost its handle
+    if (e.source !== mirror.contentWindow && e.source !== next.contentWindow && e.source !== window && !audWin()) { aud = e.source; setAud(true); }
+    if (m.type === 'ping') return;
+    if (m.type === 'ready') { post(e.source, { type: 'go', n: e.source === next.contentWindow ? Math.min(cur + 1, total - 1) : cur, dir: 1 }); post(e.source, { type: 'timer', remaining: T.remaining, running: T.running }); if (e.source === audWin()) setAud(true); }
+    else if (m.type === 'at' && e.source !== next.contentWindow) { if (m.n !== cur) go(m.n, m.dir, e.source); }
+    else if (m.type === 'timerCmd') timerCmd(m.cmd);
+    else if (m.type === 'black') { black = !!m.on; $('#nowFrame').classList.toggle('black', black); all({ type: 'black', on: black }, e.source); }
+  });
+
+  /* audience window */
+  function setAud(ok) { const s = $('#audstate'); s.textContent = ok ? 'audience window: connected' : 'audience window: not open'; s.classList.toggle('ok', ok); }
+  function openAud() {
+    const a = audWin();
+    if (a) { a.focus(); return; }
+    aud = window.open(src('audience', cur), 'bo2-audience', 'popup=yes,width=1280,height=720,menubar=no,toolbar=no,location=no,status=no');
+    $('#start').style.display = 'none';
+    if (!aud) { alert('The browser blocked the popup. Allow popups for this page and try again.'); return; }
+    setAud(false);
+    const watch = setInterval(() => { if (!audWin()) { setAud(false); clearInterval(watch); } }, 1500);
+  }
+  $('#btnAud').onclick = openAud; $('#btnStart').onclick = openAud;
+  $('#btnSkip').onclick = () => { $('#start').style.display = 'none'; };
+  $('#btnBlack').onclick = () => toggleBlack();
+  $('#btnMute').onclick = () => toggleMute();
+  $('#btnTimer').onclick = () => timerCmd('toggle');
+  function toggleBlack() { black = !black; $('#nowFrame').classList.toggle('black', black); all({ type: 'black', on: black }); }
+  function toggleMute() { muted = !muted; $('#btnMute').firstChild.nodeValue = muted ? 'Unmute' : 'Mute'; post(audWin(), { type: 'mute', on: muted }); }
+
+  document.addEventListener('keydown', e => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    switch (e.key) {
+      case 'ArrowRight': case 'ArrowDown': case 'PageDown': case ' ': case 'Enter': case 'n': e.preventDefault(); go(cur + 1, 1); break;
+      case 'ArrowLeft': case 'ArrowUp': case 'PageUp': case 'Backspace': case 'p': e.preventDefault(); go(cur - 1, -1); break;
+      case 'Home': go(0, -1); break;
+      case 'End': go(total - 1, 1); break;
+      case 'b': case 'B': case '.': toggleBlack(); break;
+      case 'm': case 'M': toggleMute(); break;
+      case 't': timerCmd('toggle'); break;
+      case 'T': timerCmd('reset'); break;
+      case 'f': case 'F': { const el = document.documentElement; document.fullscreenElement ? document.exitFullscreen() : (el.requestFullscreen && el.requestFullscreen()); break; }
+      case 'Escape': if (black) toggleBlack(); break;
+    }
+  });
+  window.addEventListener('hashchange', () => { const n = (parseInt(location.hash.slice(1), 10) || 1) - 1; if (n !== cur) go(n); });
+
+  setInterval(() => {
+    const d = new Date(); $('#clock').textContent = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    if (startedAt != null) { const s = Math.floor((Date.now() - startedAt) / 1000); $('#elapsed').textContent = fmt(s); }
+  }, 1000);
+  paint(); bcastTimer();
+})();
+</script>
+</body>
+</html>
