@@ -52,9 +52,9 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
     <div class="title">Better One, or Two? <small>presenter</small></div>
     <span id="audstate">audience window: not open</span>
     <div class="sp"></div>
-    <div class="stat"><b id="counter">1 / 54</b><span id="label">—</span></div>
+    <div class="stat"><b id="counter">Slide 1 / 54</b><span id="label">—</span></div>
     <div class="stat"><b id="elapsed">00:00</b><span>in talk</span></div>
-    <div class="stat cd off"><b id="cd">15:00</b><span>practice timer</span></div>
+    <div class="stat cd off"><b id="cd">15:00</b><span>timer · click to edit</span></div>
     <div class="stat"><b id="clock">--:--</b><span>clock</span></div>
     <button id="btnAud" class="y">Open audience window</button>
     <button id="btnBlack">Black<kbd>B</kbd></button>
@@ -63,7 +63,7 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
   </header>
   <main>
     <div class="pane">
-      <div class="lab"><span>Now · what the room sees</span><b id="nowLabel"></b></div>
+      <div class="lab"><span>Presenting</span><b id="nowLabel"></b></div>
       <div class="frame" id="nowFrame"><iframe id="mirror" title="current slide"></iframe></div>
     </div>
     <div class="pane right">
@@ -78,7 +78,7 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
     </div>
   </main>
   <footer>
-    <span><kbd>→</kbd><kbd>space</kbd> next</span><span><kbd>←</kbd> back</span><span><kbd>B</kbd> black</span><span><kbd>M</kbd> mute clicks</span><span><kbd>t</kbd> timer</span><span><kbd>⇧T</kbd> reset timer</span><span><kbd>Home</kbd> first</span><span><kbd>S</kbd> test click on TV</span><span>Sound plays in the audience window only.</span>
+    <span><kbd>→</kbd><kbd>space</kbd> next</span><span><kbd>←</kbd> back</span><span><kbd>B</kbd> black</span><span><kbd>M</kbd> mute clicks</span><span><kbd>t</kbd> timer</span><span><kbd>⇧T</kbd> reset timer</span><span><kbd>+</kbd><kbd>−</kbd> ±1 min · click the time to type one</span><span><kbd>Home</kbd> first</span><span><kbd>S</kbd> test click on TV</span><span>Sound plays in the audience window only.</span>
   </footer>
 </div>
 <div id="start">
@@ -124,10 +124,10 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
   notesEl.addEventListener('keydown', e => e.stopPropagation()); // typing in notes must not drive the deck
 
   function paint() {
-    $('#counter').textContent = `${cur + 1} / ${total}`;
-    $('#label').textContent = D.labels[cur] || '';
-    $('#nowLabel').textContent = D.labels[cur] || '';
-    $('#nextLabel').textContent = cur + 1 < total ? D.labels[cur + 1] : 'end';
+    $('#counter').textContent = `Slide ${cur + 1} / ${total}`;
+    $('#label').textContent = 'id ' + (D.labels[cur] || '');
+    $('#nowLabel').textContent = `Slide ${cur + 1}`;
+    $('#nextLabel').textContent = cur + 1 < total ? `Slide ${cur + 2}` : 'end';
     history.replaceState(null, '', '#' + (cur + 1));
     loadNotes(D.labels[cur]);
   }
@@ -146,12 +146,32 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
   const T = { remaining: 15 * 60, running: false, id: null };
   const fmt = r => `${String(Math.floor(r / 60)).padStart(2, '0')}:${String(r % 60).padStart(2, '0')}`;
   function bcastTimer() { all({ type: 'timer', remaining: T.remaining, running: T.running }); $('#cd').textContent = fmt(T.remaining); $('#cd').parentElement.classList.toggle('off', !T.running); $('#btnTimer').firstChild.nodeValue = T.running ? 'Pause' : 'Timer'; }
+  function setTimer(seconds) { T.remaining = Math.max(0, Math.min(99 * 60, Math.round(seconds))); T.base = T.remaining; bcastTimer(); }
+  T.base = 15 * 60;
+  $('#cd').title = 'Click to set a new time (e.g. 10 or 12:30)';
+  $('#cd').style.cursor = 'text';
+  $('#cd').addEventListener('click', () => {
+    const el = $('#cd'); if (el.isContentEditable) return;
+    el.contentEditable = 'true'; el.focus(); document.execCommand && document.execCommand('selectAll', false, null);
+    const done = (commit) => {
+      el.contentEditable = 'false';
+      if (commit) {
+        const v = el.textContent.trim(); const m = v.match(/^(\d{1,2})(?::(\d{1,2}))?$/);
+        if (m) setTimer(parseInt(m[1], 10) * 60 + (m[2] ? parseInt(m[2], 10) : 0));
+      }
+      bcastTimer();
+    };
+    el.onkeydown = e => { e.stopPropagation(); if (e.key === 'Enter') { e.preventDefault(); done(true); } if (e.key === 'Escape') done(false); };
+    el.onblur = () => done(true);
+  });
   function timerCmd(cmd) {
     if (cmd === 'toggle') {
       T.running = !T.running;
       if (T.running && !T.id) T.id = setInterval(() => { if (T.remaining > 0) T.remaining--; if (T.remaining === 0) { T.running = false; clearInterval(T.id); T.id = null; } bcastTimer(); }, 1000);
       if (!T.running) { clearInterval(T.id); T.id = null; }
-    } else if (cmd === 'reset') { T.running = false; clearInterval(T.id); T.id = null; T.remaining = 15 * 60; }
+    } else if (cmd === 'reset') { T.running = false; clearInterval(T.id); T.id = null; T.remaining = T.base || 15 * 60; }
+    else if (cmd === 'plus') setTimer(T.remaining + 60);
+    else if (cmd === 'minus') setTimer(T.remaining - 60);
     bcastTimer();
   }
 
@@ -197,6 +217,8 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
       case 'm': case 'M': toggleMute(); break;
       case 't': timerCmd('toggle'); break;
       case 'T': timerCmd('reset'); break;
+      case '+': case '=': timerCmd('plus'); break;
+      case '-': case '_': timerCmd('minus'); break;
       case 'f': case 'F': { const el = document.documentElement; document.fullscreenElement ? document.exitFullscreen() : (el.requestFullscreen && el.requestFullscreen()); break; }
       case 's': case 'S': post(audWin(), { type: 'testclick' }); break;
       case 'Escape': if (black) toggleBlack(); break;

@@ -632,9 +632,8 @@ html[data-role="preview"] *,html[data-role="preview"] *::before,html[data-role="
 </section>
 <section data-label="PR-02" data-speaker-notes="Live countdown inside the lens. Click the time to start/pause; double-click resets to 15:00." style="background:#0E1314;color:#EDE7DA;font-family:'IBM Plex Mono',monospace;overflow:hidden">
   <img src="assets/img/lens-letters.jpg" alt="Looking through a phoropter lens" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%">
-  <div data-timer="1" title="Click to start/pause · double-click to reset" style="position:absolute;left:945px;top:404px;width:160px;height:70px;background:#D9F3E6;box-shadow:0 0 10px 8px #D9F3E6;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:34px;font-weight:600;letter-spacing:.06em;color:#4F5B58;filter:blur(.3px)">
+  <div data-timer="1" title="Click to start/pause · double-click to reset" style="position:absolute;left:945px;top:404px;width:160px;height:70px;background:#DAF4E7;box-shadow:0 0 26px 18px #DAF4E7;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:34px;font-weight:600;letter-spacing:.06em;color:#4F5B58;filter:blur(.3px)">
     <span><span data-timer-text>15:00</span></span>
-    <span style="position:absolute;inset:-8px;background-image:url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'&gt;&lt;filter id='n'&gt;&lt;feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/&gt;&lt;feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/&gt;&lt;/filter&gt;&lt;rect width='100%' height='100%' filter='url(%23n)'/&gt;&lt;/svg&gt;&quot;);opacity:.35;mix-blend-mode:multiply;pointer-events:none"></span>
   </div>
 </section>
 <section data-label="PR-04" data-speaker-notes="Quote setting." style="background:#111516;color:#EDE7DA;font-family:Archivo,sans-serif;padding:var(--pad-top) var(--pad-x) var(--pad-bottom);display:flex;flex-direction:column;justify-content:center;gap:var(--gap-title)">
@@ -960,7 +959,7 @@ html[data-role="preview"] *,html[data-role="preview"] *::before,html[data-role="
   let hudTimer = null;
   function updateHud() {
     if (QUIET) return;
-    const parts = [`<span class="k">${cur + 1}</span>/${slides.length}`, `<span>${labels[cur]}</span>`];
+    const parts = [`<span class="k">Slide ${cur + 1}</span>/${slides.length}`];
     const st = audio.state();
     parts.push(`<span class="${st === 'armed' ? 'k' : 'warn'}">sound: ${st}${st === 'not armed' ? ' — press any key' : ''}</span>`);
     if (timer.running) parts.push(`<span class="k">⏱ ${fmt(timer.remaining)}</span>`);
@@ -990,7 +989,9 @@ html[data-role="preview"] *,html[data-role="preview"] *::before,html[data-role="
       if (timer.running) { if (!timer.id) timer.id = setInterval(tick, 1000); }
       else { clearInterval(timer.id); timer.id = null; }
     } else if (cmd === 'reset') {
-      timer.running = false; clearInterval(timer.id); timer.id = null; timer.remaining = 15 * 60; paintTimer();
+      timer.running = false; clearInterval(timer.id); timer.id = null; timer.remaining = timer.base || 15 * 60; paintTimer();
+    } else if (cmd === 'plus' || cmd === 'minus') {
+      timer.remaining = Math.max(0, Math.min(99 * 60, timer.remaining + (cmd === 'plus' ? 60 : -60))); timer.base = timer.remaining; paintTimer();
     }
     showHud(1200);
   }
@@ -1096,6 +1097,8 @@ html[data-role="preview"] *,html[data-role="preview"] *::before,html[data-role="
       case 'm': case 'M': audio.muted = !audio.muted; showHud(1200); break;
       case 't': timerCmd('toggle'); break;
       case 'T': timerCmd('reset'); break;
+      case '+': case '=': timerCmd('plus'); break;
+      case '-': case '_': timerCmd('minus'); break;
       case 'P': if (SOLO) location.href = 'presenter.html#' + (cur + 1); break;
       case 'Escape': black.classList.remove('on'); bus.send({ type: 'black', on: false }); break;
       case 's': case 'S': audio.click(0); audio.click(130); showHud(2500); break;

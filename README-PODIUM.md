@@ -22,8 +22,10 @@ The presenter shows: what the room sees (live, with the animations), the next fr
 | ← · PgUp · clicker back | back |
 | **B** or **.** | black screen on the TV (press again to return) |
 | **M** | mute / unmute the phoropter clicks |
-| **t** | countdown start / pause (frame 38) |
-| **Shift+T** | countdown reset to 15:00 |
+| **t** | countdown start / pause |
+| **Shift+T** | countdown reset (to whatever you last set) |
+| **+** / **−** | add / remove a minute |
+| click the time in the presenter | type a new time (`10` or `12:30`), Enter |
 | **F** | fullscreen the window you're in |
 | Home / End | first / last frame |
 
