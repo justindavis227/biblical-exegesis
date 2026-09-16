@@ -16,7 +16,7 @@ The audience window shows the slide and nothing else. Before you start it may wa
 
 *Where your typing goes:* it saves into this browser the moment you stop typing (the label reads **edited here · saved**) and always beats `notes.js`, so it survives reloads, new builds and pushes. What it does **not** survive: a different browser, another Mac, or switching between the local file and the hosted link — those are separate stores. Press **Save notes** in the header to download a `notes.js` containing every note with your edits merged in; drop that file in the deck folder (replacing the old one) and your edits are permanent everywhere.
 
-To undo an edit on one slide, click **revert** next to the label — it asks first.
+To undo an edit on one slide, click **revert** next to the label — it asks first, then the slide falls back to the `notes.js` text.
 
 **If the presenter window ever reloads or crashes:** reopen `presenter.html`. It finds the audience window on its own within two seconds — the TV never goes dark.
 
