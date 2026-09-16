@@ -5,93 +5,110 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Presenter — Better One, or Two?</title>
 <style>
-:root{--ink:#EDE7DA;--dim:#A9B4B6;--mute:#6B7577;--y:#F2C21B;--g0:#0B0F10;--g1:#111516;--g2:#1E2426;--g3:#2A3133}
+:root{--ink:#EDE7DA;--dim:#A9B4B6;--mute:#6B7577;--y:#F2C21B;--ok:#3FA45F;--bad:#C4453C;--g0:#0B0F10;--g1:#111516;--g2:#1E2426;--g3:#2A3133}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:var(--g0);color:var(--ink);font:500 15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;overflow:hidden}
-#app{display:grid;grid-template-rows:auto 1fr auto;height:100vh}
-header{display:grid;grid-template-columns:auto auto 1fr auto auto;grid-template-areas:"title aud sp stats btns";align-items:center;column-gap:18px;row-gap:8px;padding:10px 20px;background:var(--g1);border-bottom:1px solid var(--g3)}
+#app{display:grid;grid-template-rows:auto minmax(0,1fr) auto;height:100vh}
+
+/* ---------- header ---------- */
+header{display:grid;grid-template-columns:auto 1fr auto auto;grid-template-areas:"title sp stats btns";align-items:center;column-gap:18px;row-gap:10px;padding:10px 18px;background:var(--g1);border-bottom:1px solid var(--g3)}
 header .title{grid-area:title;font-weight:800;letter-spacing:.02em;white-space:nowrap}
-header .title small{color:var(--dim);font-weight:500;margin-left:8px}
-#audstate{grid-area:aud;font-size:12px;color:var(--mute);white-space:nowrap}
-#audstate.ok{color:#7CC48F}
 header .sp{grid-area:sp}
-.stats{grid-area:stats;display:flex;gap:22px;align-items:center;justify-content:flex-end}
+.stats{grid-area:stats;display:flex;gap:24px;align-items:center;justify-content:flex-end}
 .btns{grid-area:btns;display:flex;gap:8px;align-items:center;white-space:nowrap}
 .stat{display:flex;flex-direction:column;align-items:flex-end;line-height:1.1;white-space:nowrap}
 .stat b{font-size:22px;font-variant-numeric:tabular-nums;letter-spacing:.02em}
-.stat span{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.12em}
-.stat.cd b{color:var(--y)}
-.stat.cd.off b{color:var(--mute)}
-.stat.click{cursor:pointer}
-.stat.click:hover span{color:var(--ink)}
+.stat span{font-size:10px;color:var(--mute);text-transform:uppercase;letter-spacing:.12em}
+.stat.cd b{color:var(--y)} .stat.cd.off b{color:var(--mute)}
+.stat.click{cursor:pointer} .stat.click:hover span{color:var(--ink)}
 button{background:var(--g2);color:var(--ink);border:1px solid var(--g3);border-radius:8px;padding:8px 12px;font:600 13px/1 inherit;cursor:pointer;white-space:nowrap}
 button:hover{background:var(--g3)}
-button.y{background:var(--y);color:#161412;border-color:var(--y)}
-button.y:hover{filter:brightness(1.06)}
 button kbd{margin-left:6px;opacity:.55;font:inherit;font-weight:500}
+/* one control for the audience window: red = not live, green = live */
+#aud{display:flex;align-items:center;gap:8px;font-weight:700}
+#aud .dot{width:9px;height:9px;border-radius:50%;background:currentColor;box-shadow:0 0 0 3px rgba(255,255,255,.1)}
+#aud.off{background:rgba(196,69,60,.16);border-color:var(--bad);color:#F0908A}
+#aud.off:hover{background:rgba(196,69,60,.28)}
+#aud.on{background:rgba(63,164,95,.16);border-color:var(--ok);color:#7CC48F}
+#aud.on:hover{background:rgba(63,164,95,.28)}
 @media (max-width:1500px){
-  header{grid-template-columns:auto auto 1fr auto;grid-template-areas:"title aud sp btns" "stats stats stats stats"}
-  .stats{justify-content:space-between;gap:16px;padding-top:2px;border-top:1px solid var(--g3);padding-top:8px}
+  header{grid-template-columns:auto 1fr auto;grid-template-areas:"title sp btns" "stats stats stats"}
+  .stats{justify-content:space-between;gap:14px;border-top:1px solid var(--g3);padding-top:8px}
 }
-@media (max-width:1200px){
-  .stat b{font-size:19px}
-  header .title small{display:none}
-  button kbd{display:none}
-}
-@media (max-width:900px){
-  header{grid-template-columns:1fr auto;grid-template-areas:"title btns" "aud aud" "stats stats"}
-  header .sp{display:none}
-  .btns{flex-wrap:wrap;justify-content:flex-end}
-}
-main{display:grid;grid-template-columns:minmax(0,1.62fr) minmax(320px,1fr);gap:16px;padding:16px;min-height:0}
-@media (max-width:1100px){
-  main{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}
-  .pane.now .frame{max-width:min(100%,calc((100vh - 420px) * 16 / 9));margin:0 auto}
-  .right{grid-template-rows:none;grid-template-columns:minmax(220px,2fr) 3fr;gap:16px}
-  .right .frame{max-width:100%}
-  #notes{font-size:17px}
-}
-.pane{display:flex;flex-direction:column;min-height:0;gap:8px}
-.lab{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.14em;display:flex;justify-content:space-between}
+@media (max-width:1150px){ .stat b{font-size:19px} button kbd{display:none} }
+
+/* ---------- main ---------- */
+main{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);gap:14px;padding:14px 14px 10px;min-height:0}
+.pane{display:flex;flex-direction:column;min-height:0;gap:7px}
+.lab{font-size:10px;color:var(--mute);text-transform:uppercase;letter-spacing:.14em;display:flex;justify-content:space-between;align-items:baseline}
 .lab b{color:var(--y);letter-spacing:.06em}
+.lab .src{cursor:pointer}.lab .src:hover{color:var(--y)}
 .frame{position:relative;width:100%;aspect-ratio:16/9;background:#000;border:1px solid var(--g3);border-radius:8px;overflow:hidden}
 .frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#0B0F10}
 .frame.black::after{content:"BLACK";position:absolute;inset:0;background:#000;color:var(--mute);display:flex;align-items:center;justify-content:center;letter-spacing:.3em;font-size:12px}
-.right{display:grid;grid-template-rows:auto 1fr;gap:12px;min-height:0}
-.lab .src{cursor:pointer}
-.lab .src:hover{color:var(--y)}
-#notes{flex:1;min-height:0;overflow:auto;background:var(--g1);border:1px solid var(--g3);border-radius:8px;padding:16px 18px;font-size:19px;line-height:1.5;white-space:pre-wrap;outline:none}
+/* right column: notes take the big slot, the next slide sits under it */
+.right{display:grid;grid-template-rows:minmax(0,1fr) auto;gap:12px;min-height:0}
+#notes{flex:1;min-height:0;overflow:auto;background:var(--g1);border:1px solid var(--g3);border-radius:8px;padding:15px 17px;font-size:19px;line-height:1.5;white-space:pre-wrap;outline:none}
 #notes:focus{border-color:var(--y)}
 #notes:empty::before{content:"No notes for this frame — click to type. Saved on this Mac.";color:var(--mute)}
-footer{display:flex;flex-wrap:wrap;align-items:center;gap:6px 22px;padding:8px 20px;background:var(--g1);border-top:1px solid var(--g3);font-size:12px;color:var(--dim);white-space:nowrap}
-footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;padding:1px 6px;color:var(--ink);font:600 11px/1.6 inherit;margin-right:4px}
-#audstate{font-size:12px;color:var(--mute)}
-#audstate.ok{color:#7CC48F}
+.next-pane .frame{width:min(100%,300px)}
+@media (max-width:1250px){
+  main{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}
+  .pane.now .frame{max-width:min(100%,calc((100vh - 500px) * 16 / 9));margin:0 auto}
+  .right{grid-template-rows:none;grid-template-columns:3fr minmax(190px,1fr)}
+  .next-pane .frame{width:100%}
+  #notes{font-size:17px}
+}
+
+/* ---------- timeline ---------- */
+#film{display:flex;gap:8px;align-items:flex-end;overflow-x:auto;overflow-y:hidden;padding:9px 14px 10px;background:var(--g1);border-top:1px solid var(--g3);scrollbar-width:thin}
+#film::-webkit-scrollbar{height:8px}
+#film::-webkit-scrollbar-thumb{background:var(--g3);border-radius:4px}
+.sl{flex:0 0 auto;width:124px;cursor:pointer;border:0;background:none;padding:0;text-align:left}
+.sl img{display:block;width:124px;height:70px;object-fit:cover;border-radius:5px;border:2px solid var(--g3);background:#000;opacity:.6;transition:opacity .12s,border-color .12s}
+.sl:hover img{opacity:1;border-color:var(--mute)}
+.sl .n{font:600 10px/1.7 inherit;color:var(--mute);letter-spacing:.08em}
+.sl.on img{opacity:1;border-color:var(--y)}
+.sl.on .n{color:var(--y)}
+.sl.nxt img{border-color:#4A5557;opacity:.85}
+
+/* ---------- keys sheet ---------- */
+#keys{position:fixed;inset:0;background:rgba(11,15,16,.86);display:none;align-items:center;justify-content:center;z-index:60}
+#keys.show{display:flex}
+#keys .card{background:var(--g1);border:1px solid var(--g3);border-radius:14px;padding:26px 30px;max-width:560px;width:calc(100% - 40px)}
+#keys h2{margin:0 0 14px;font-size:18px}
+#keys table{width:100%;border-collapse:collapse;font-size:14px}
+#keys td{padding:6px 0;border-top:1px solid var(--g2);color:var(--dim)}
+#keys td:first-child{width:150px;color:var(--ink)}
+#keys tr:first-child td{border-top:0}
+kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;padding:1px 6px;color:var(--ink);font:600 11px/1.6 inherit;margin-right:4px}
+#keys .close{margin-top:18px}
+
 #start{position:fixed;inset:0;background:rgba(11,15,16,.92);display:flex;align-items:center;justify-content:center;z-index:50}
 #start>div{background:var(--g1);border:2px solid var(--y);border-radius:16px;padding:32px 40px;max-width:640px;font-size:16px;line-height:1.55}
 #start h2{margin:0 0 12px;font-size:22px}
 #start ol{margin:14px 0 20px;padding-left:22px}
 #start li{margin:6px 0}
 #start .row{display:flex;gap:10px;align-items:center}
+#start .go{background:var(--y);color:#161412;border-color:var(--y)}
 </style>
 </head>
 <body>
 <div id="app">
   <header>
-    <div class="title">Better One, or Two? <small>presenter</small></div>
-    <span id="audstate">audience window: not open</span>
+    <div class="title">Better One, or Two?</div>
     <div class="sp"></div>
     <div class="stats">
       <div class="stat"><b id="counter">Slide 1 / 54</b><span id="label">—</span></div>
       <div class="stat click" id="talk" title="Click to reset the talk clock to 00:00 (E)"><b id="elapsed">00:00</b><span>in talk · click to reset</span></div>
       <div class="stat cd off"><b id="cd">15:00</b><span>timer · click to edit</span></div>
-      <div class="stat"><b id="clock">--:--</b><span>clock</span></div>
     </div>
     <div class="btns">
-      <button id="btnAud" class="y">Open audience window</button>
+      <button id="aud" class="off"><span class="dot"></span><span id="audtext">Audience window — off</span></button>
       <button id="btnBlack">Black<kbd>B</kbd></button>
       <button id="btnMute">Mute<kbd>M</kbd></button>
       <button id="btnTimer">Timer<kbd>t</kbd></button>
+      <button id="btnKeys">Keys<kbd>?</kbd></button>
     </div>
   </header>
   <main>
@@ -101,19 +118,40 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
     </div>
     <div class="pane right">
       <div class="pane">
-        <div class="lab"><span>Next</span><b id="nextLabel"></b></div>
-        <div class="frame"><iframe id="next" title="next slide"></iframe></div>
-      </div>
-      <div class="pane">
         <div class="lab"><span>Notes</span><span id="notesSrc" class="src" title="Click to go back to the notes.js text"></span></div>
         <div id="notes" contenteditable="true" spellcheck="false"></div>
       </div>
+      <div class="pane next-pane">
+        <div class="lab"><span>Next</span><b id="nextLabel"></b></div>
+        <div class="frame"><iframe id="next" title="next slide"></iframe></div>
+      </div>
     </div>
   </main>
-  <footer>
-    <span><kbd>→</kbd><kbd>space</kbd> next</span><span><kbd>←</kbd> back</span><span><kbd>B</kbd> black</span><span><kbd>M</kbd> mute clicks</span><span><kbd>t</kbd> timer</span><span><kbd>⇧T</kbd> reset timer</span><span><kbd>E</kbd> reset talk clock</span><span><kbd>+</kbd><kbd>−</kbd> ±1 min · click the time to type one</span><span><kbd>Home</kbd> first</span><span><kbd>S</kbd> test click on TV</span><span>Sound plays in the audience window only.</span>
-  </footer>
+  <div id="film"></div>
 </div>
+
+<div id="keys">
+  <div class="card">
+    <h2>Keys</h2>
+    <table>
+      <tr><td><kbd>→</kbd><kbd>space</kbd></td><td>next slide — your clicker too</td></tr>
+      <tr><td><kbd>←</kbd></td><td>back</td></tr>
+      <tr><td><kbd>B</kbd><kbd>.</kbd></td><td>black the TV — press again to return</td></tr>
+      <tr><td><kbd>M</kbd></td><td>mute / unmute the phoropter clicks</td></tr>
+      <tr><td><kbd>t</kbd></td><td>practice countdown start / pause</td></tr>
+      <tr><td><kbd>⇧T</kbd></td><td>reset the countdown</td></tr>
+      <tr><td><kbd>+</kbd><kbd>−</kbd></td><td>countdown ±1 min — or click the time and type one</td></tr>
+      <tr><td><kbd>E</kbd></td><td>reset the talk clock to 00:00</td></tr>
+      <tr><td><kbd>Home</kbd><kbd>End</kbd></td><td>first / last slide</td></tr>
+      <tr><td><kbd>F</kbd></td><td>fullscreen this window</td></tr>
+      <tr><td><kbd>S</kbd></td><td>test the click sound on the TV</td></tr>
+      <tr><td>Timeline</td><td>click any slide below to jump straight to it</td></tr>
+      <tr><td>Sound</td><td>plays in the audience window only</td></tr>
+    </table>
+    <button class="close" id="keysClose">Close</button>
+  </div>
+</div>
+
 <div id="start">
   <div>
     <h2>Presenter mode</h2>
@@ -122,10 +160,12 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
       <li><b>Click once inside it</b> — that fills the TV screen and turns on the phoropter sound.</li>
       <li>Come back to this window. Your clicker and arrow keys work from here.</li>
     </ol>
-    <div class="row"><button id="btnStart" class="y">Open audience window</button><button id="btnSkip">I'll do it later</button></div>
+    <div class="row"><button id="btnStart" class="go">Open audience window</button><button id="btnSkip">I'll do it later</button></div>
   </div>
 </div>
+
 <script src="notes.js"></script>
+<script src="thumbs.js"></script>
 <script>
 (() => {
   const $ = s => document.querySelector(s);
@@ -145,7 +185,25 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
     const a = audWin(); if (a && a !== except) post(a, msg);
   };
 
-  /* notes: notes.js defaults, overridden per-label by what you type (localStorage) */
+  /* ---------- timeline: every slide, click to jump ---------- */
+  const film = $('#film');
+  D.labels.forEach((lab, i) => {
+    const b = document.createElement('button');
+    b.className = 'sl'; b.title = `Slide ${i + 1} · ${lab}`;
+    b.innerHTML = `<img src="${(window.DECK_THUMBS || [])[i] || ''}" alt=""><div class="n">${i + 1}</div>`;
+    b.addEventListener('click', () => go(i));
+    film.appendChild(b);
+  });
+  const chips = [...film.children];
+  function paintFilm() {
+    chips.forEach((c, i) => { c.classList.toggle('on', i === cur); c.classList.toggle('nxt', i === cur + 1); });
+    const c = chips[cur];
+    if (!c) return;
+    const r = c.getBoundingClientRect(), f = film.getBoundingClientRect();
+    if (r.left < f.left + 40 || r.right > f.right - 40) c.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+  }
+
+  /* ---------- notes ---------- */
   const notesEl = $('#notes');
   const key = l => 'bo2.notes.' + l;
   function loadNotes(label) {
@@ -155,7 +213,7 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
   }
   notesEl.addEventListener('input', () => { try { localStorage.setItem(key(D.labels[cur]), notesEl.textContent); $('#notesSrc').textContent = 'edited here'; } catch (e) {} });
   notesEl.addEventListener('keydown', e => e.stopPropagation()); // typing in notes must not drive the deck
-  $('#notesSrc').addEventListener('click', () => {            // "edited here" -> drop the local copy, show the file's notes
+  $('#notesSrc').addEventListener('click', () => {
     try { localStorage.removeItem(key(D.labels[cur])); } catch (e) {}
     loadNotes(D.labels[cur]);
   });
@@ -171,6 +229,7 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
     $('#nextLabel').textContent = cur + 1 < total ? `Slide ${cur + 2}` : 'end';
     history.replaceState(null, '', '#' + (cur + 1));
     loadNotes(D.labels[cur]);
+    paintFilm();
   }
   function go(n, dir, except) {
     n = Math.max(0, Math.min(total - 1, n));
@@ -183,7 +242,7 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
     paint();
   }
 
-  /* timer — the console owns it and broadcasts every second */
+  /* ---------- countdown — the console owns it and broadcasts every second ---------- */
   const T = { remaining: 15 * 60, running: false, id: null };
   const fmt = r => `${String(Math.floor(r / 60)).padStart(2, '0')}:${String(r % 60).padStart(2, '0')}`;
   function bcastTimer() { all({ type: 'timer', remaining: T.remaining, running: T.running }); $('#cd').textContent = fmt(T.remaining); $('#cd').parentElement.classList.toggle('off', !T.running); $('#btnTimer').firstChild.nodeValue = T.running ? 'Pause' : 'Timer'; }
@@ -216,7 +275,7 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
     bcastTimer();
   }
 
-  /* messages from the audience window and the iframes */
+  /* ---------- messages from the audience window and the iframes ---------- */
   window.addEventListener('message', e => {
     const m = e.data && e.data.deck; if (!m) return;
     // adopt the audience window if this console was reloaded and lost its handle
@@ -228,8 +287,13 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
     else if (m.type === 'black') { black = !!m.on; $('#nowFrame').classList.toggle('black', black); all({ type: 'black', on: black }, e.source); }
   });
 
-  /* audience window */
-  function setAud(ok) { const s = $('#audstate'); s.textContent = ok ? 'audience window: connected' : 'audience window: not open'; s.classList.toggle('ok', ok); }
+  /* ---------- audience window: one control, red when off, green when live ---------- */
+  function setAud(ok) {
+    const b = $('#aud');
+    b.classList.toggle('on', ok); b.classList.toggle('off', !ok);
+    $('#audtext').textContent = ok ? 'Audience window — live' : 'Audience window — off';
+    b.title = ok ? 'Live on the second screen. Click to bring it forward.' : 'Not open. Click to open it, then drag it onto the TV.';
+  }
   function openAud() {
     const a = audWin();
     if (a) { a.focus(); return; }
@@ -237,13 +301,18 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
     $('#start').style.display = 'none';
     if (!aud) { alert('The browser blocked the popup. Allow popups for this page and try again.'); return; }
     setAud(false);
-    const watch = setInterval(() => { if (!audWin()) { setAud(false); clearInterval(watch); } }, 1500);
+    setInterval(() => { if (!audWin()) setAud(false); }, 1500);
   }
-  $('#btnAud').onclick = openAud; $('#btnStart').onclick = openAud;
+  $('#aud').onclick = openAud; $('#btnStart').onclick = openAud;
   $('#btnSkip').onclick = () => { $('#start').style.display = 'none'; };
   $('#btnBlack').onclick = () => toggleBlack();
   $('#btnMute').onclick = () => toggleMute();
   $('#btnTimer').onclick = () => timerCmd('toggle');
+  const keysSheet = $('#keys');
+  const toggleKeys = on => keysSheet.classList.toggle('show', on === undefined ? !keysSheet.classList.contains('show') : on);
+  $('#btnKeys').onclick = () => toggleKeys();
+  $('#keysClose').onclick = () => toggleKeys(false);
+  keysSheet.addEventListener('click', e => { if (e.target === keysSheet) toggleKeys(false); });
   function toggleBlack() { black = !black; $('#nowFrame').classList.toggle('black', black); all({ type: 'black', on: black }); }
   function toggleMute() { muted = !muted; $('#btnMute').firstChild.nodeValue = muted ? 'Unmute' : 'Mute'; post(audWin(), { type: 'mute', on: muted }); }
 
@@ -260,19 +329,19 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
       case 'T': timerCmd('reset'); break;
       case '+': case '=': timerCmd('plus'); break;
       case '-': case '_': timerCmd('minus'); break;
+      case 'e': case 'E': resetTalk(); break;
+      case '?': case '/': toggleKeys(); break;
       case 'f': case 'F': { const el = document.documentElement; document.fullscreenElement ? document.exitFullscreen() : (el.requestFullscreen && el.requestFullscreen()); break; }
       case 's': case 'S': post(audWin(), { type: 'testclick' }); break;
-      case 'e': case 'E': resetTalk(); break;
-      case 'Escape': if (black) toggleBlack(); break;
+      case 'Escape': if (keysSheet.classList.contains('show')) toggleKeys(false); else if (black) toggleBlack(); break;
     }
   });
   window.addEventListener('hashchange', () => { const n = (parseInt(location.hash.slice(1), 10) || 1) - 1; if (n !== cur) go(n); });
 
   setInterval(() => {
-    const d = new Date(); $('#clock').textContent = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
     if (startedAt != null) { const s = Math.floor((Date.now() - startedAt) / 1000); $('#elapsed').textContent = fmt(s); }
   }, 1000);
-  paint(); bcastTimer();
+  setAud(false); paint(); bcastTimer();
 })();
 </script>
 </body>

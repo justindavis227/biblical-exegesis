@@ -4,17 +4,21 @@
 
 1. Plug in the TV. In macOS **System Settings → Displays**, make sure it's **extended**, not mirrored.
 2. Open **`presenter.html`** in Chrome (Safari works too). Press **F** if you want it full-screen on the laptop.
-3. Click **Open audience window**. A second window appears — **drag it onto the TV.**
+3. Click the red **Audience window — off** button. A second window appears — **drag it onto the TV.** The button turns green and reads *live* once it's connected.
 4. **Click once inside the audience window.** That fills the TV and turns on the phoropter sound. (Browsers only allow fullscreen and sound after a click *in that window* — that's why this step exists.)
 5. Come back to the presenter window. Your clicker and arrow keys drive both screens from here.
 
-The presenter shows: what the room sees (live, with the animations), the next frame, notes, a wall clock, time-in-talk, and the practice countdown. It reflows for a half-screen window, so it can sit beside Craft.
+The presenter shows: what the room sees (live, with the animations), your notes, the next frame, time-in-talk, and the practice countdown. Along the bottom is a **timeline of all 54 slides — click any one to jump straight to it**, which is the fast way to skip or double back. It reflows for a half-screen window, so it can sit beside Craft.
+
+The audience window shows the slide and nothing else. Before you start it may warn you that sound isn't armed or that it isn't filling the screen; both disappear once you click inside it and it goes full-screen.
 
 **Notes** — your Craft outline, one entry per frame, lives in `notes.js`. Click the notes box to type over it for that frame (saved on this Mac only; the label turns to *edited here*). Click *edited here* to go back to the file's text.
 
 **If the presenter window ever reloads or crashes:** reopen `presenter.html`. It finds the audience window on its own within two seconds — the TV never goes dark.
 
-## Keys (work in the presenter window; most also work in the audience window)
+## Keys
+
+Press **?** or click **Keys** in the presenter for this list on screen.
 
 | Key | Does |
 |---|---|
