@@ -109,7 +109,7 @@ window.DECK = {
     "PC-08": "What do you do when you have no control over the desired outcome, but you disagree with the direction? (Expository vs. topical.)\n\nHow do you honor someone else's creative request and still honor the biblical text?",
     "PC-10b": "Learning to exegete the people will help you exegete the text.\n\nA lost person needs… a new believer needs… a stuck follower needs… a prideful worker needs… a hopeless disciple-maker needs…\n\nUse the 4 Chair framework to explain how to be adaptable.",
     "PC-11": "COMMON MISTAKES\n\n1. We jump to reading other people's work on a text without first allowing God to use the text to work in us.\n2. We become burdened by the demand of studying by losing perspective on the fruit God bears in us through studying.\n3. We waste time chasing the right study formula, the right tools, at the expense of just enjoying being in God's Word.\n\n▸ Three beats build in.",
-    "TL-01": "TOOLS · 5 min\n\nLife Application Study Bible · Commentaries (The Gospel Coalition) · the 9 worksheets (Cino) · Blue Letter Bible · Logos.\n\n▸ Wear the tool belt. Slides stay plain.",
+    "TL-01": "TOOLS · 5 min\n\nLife Application Study Bible · Commentaries (The Gospel Coalition) · Genre Worksheets x9 (thanks Cino) · Blue Letter Bible · Logos.\n\nPoint at the QR in the corner—it goes to the RISE exegesis page with the worksheets, the slides and this list. Tell them to scan it now; leave this slide up while they do.\n\n▸ Wear the tool belt.",
     "TL-02": "You will always have more tools at your disposal than necessary. Your job is to know which tool on your belt is needed, and for when."
   }
 };
