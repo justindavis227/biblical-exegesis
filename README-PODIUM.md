@@ -8,9 +8,9 @@
 4. **Click once inside the audience window.** That fills the TV and turns on the phoropter sound. (Browsers only allow fullscreen and sound after a click *in that window* — that's why this step exists.)
 5. Come back to the presenter window. Your clicker and arrow keys drive both screens from here.
 
-The presenter shows: what the room sees (live, with the animations), the next frame, notes, a wall clock, time-in-talk, and the practice countdown.
+The presenter shows: what the room sees (live, with the animations), the next frame, notes, a wall clock, time-in-talk, and the practice countdown. It reflows for a half-screen window, so it can sit beside Craft.
 
-**Notes** — click the notes box and type; it saves on this Mac per frame. Defaults come from `notes.js`, which you can also edit in any text editor.
+**Notes** — your Craft outline, one entry per frame, lives in `notes.js`. Click the notes box to type over it for that frame (saved on this Mac only; the label turns to *edited here*). Click *edited here* to go back to the file's text.
 
 **If the presenter window ever reloads or crashes:** reopen `presenter.html`. It finds the audience window on its own within two seconds — the TV never goes dark.
 
@@ -25,6 +25,7 @@ The presenter shows: what the room sees (live, with the animations), the next fr
 | **t** | countdown start / pause |
 | **Shift+T** | countdown reset (to whatever you last set) |
 | **+** / **−** | add / remove a minute |
+| **E** or click "in talk" | reset the talk clock to 00:00 — do this right before you start; it begins counting on your first advance |
 | click the time in the presenter | type a new time (`10` or `12:30`), Enter |
 | **F** | fullscreen the window you're in |
 | Home / End | first / last frame |

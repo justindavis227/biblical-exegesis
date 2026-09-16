@@ -8,22 +8,49 @@
 :root{--ink:#EDE7DA;--dim:#A9B4B6;--mute:#6B7577;--y:#F2C21B;--g0:#0B0F10;--g1:#111516;--g2:#1E2426;--g3:#2A3133}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:var(--g0);color:var(--ink);font:500 15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;overflow:hidden}
-#app{display:grid;grid-template-rows:64px 1fr 44px;height:100vh}
-header{display:flex;align-items:center;gap:18px;padding:0 20px;background:var(--g1);border-bottom:1px solid var(--g3)}
-header .title{font-weight:800;letter-spacing:.02em}
+#app{display:grid;grid-template-rows:auto 1fr auto;height:100vh}
+header{display:grid;grid-template-columns:auto auto 1fr auto auto;grid-template-areas:"title aud sp stats btns";align-items:center;column-gap:18px;row-gap:8px;padding:10px 20px;background:var(--g1);border-bottom:1px solid var(--g3)}
+header .title{grid-area:title;font-weight:800;letter-spacing:.02em;white-space:nowrap}
 header .title small{color:var(--dim);font-weight:500;margin-left:8px}
-header .sp{flex:1}
-.stat{display:flex;flex-direction:column;align-items:flex-end;line-height:1.1}
+#audstate{grid-area:aud;font-size:12px;color:var(--mute);white-space:nowrap}
+#audstate.ok{color:#7CC48F}
+header .sp{grid-area:sp}
+.stats{grid-area:stats;display:flex;gap:22px;align-items:center;justify-content:flex-end}
+.btns{grid-area:btns;display:flex;gap:8px;align-items:center;white-space:nowrap}
+.stat{display:flex;flex-direction:column;align-items:flex-end;line-height:1.1;white-space:nowrap}
 .stat b{font-size:22px;font-variant-numeric:tabular-nums;letter-spacing:.02em}
 .stat span{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.12em}
 .stat.cd b{color:var(--y)}
 .stat.cd.off b{color:var(--mute)}
-button{background:var(--g2);color:var(--ink);border:1px solid var(--g3);border-radius:8px;padding:8px 12px;font:600 13px/1 inherit;cursor:pointer}
+.stat.click{cursor:pointer}
+.stat.click:hover span{color:var(--ink)}
+button{background:var(--g2);color:var(--ink);border:1px solid var(--g3);border-radius:8px;padding:8px 12px;font:600 13px/1 inherit;cursor:pointer;white-space:nowrap}
 button:hover{background:var(--g3)}
 button.y{background:var(--y);color:#161412;border-color:var(--y)}
 button.y:hover{filter:brightness(1.06)}
 button kbd{margin-left:6px;opacity:.55;font:inherit;font-weight:500}
+@media (max-width:1500px){
+  header{grid-template-columns:auto auto 1fr auto;grid-template-areas:"title aud sp btns" "stats stats stats stats"}
+  .stats{justify-content:space-between;gap:16px;padding-top:2px;border-top:1px solid var(--g3);padding-top:8px}
+}
+@media (max-width:1200px){
+  .stat b{font-size:19px}
+  header .title small{display:none}
+  button kbd{display:none}
+}
+@media (max-width:900px){
+  header{grid-template-columns:1fr auto;grid-template-areas:"title btns" "aud aud" "stats stats"}
+  header .sp{display:none}
+  .btns{flex-wrap:wrap;justify-content:flex-end}
+}
 main{display:grid;grid-template-columns:minmax(0,1.62fr) minmax(320px,1fr);gap:16px;padding:16px;min-height:0}
+@media (max-width:1100px){
+  main{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}
+  .pane.now .frame{max-width:min(100%,calc((100vh - 420px) * 16 / 9));margin:0 auto}
+  .right{grid-template-rows:none;grid-template-columns:minmax(220px,2fr) 3fr;gap:16px}
+  .right .frame{max-width:100%}
+  #notes{font-size:17px}
+}
 .pane{display:flex;flex-direction:column;min-height:0;gap:8px}
 .lab{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.14em;display:flex;justify-content:space-between}
 .lab b{color:var(--y);letter-spacing:.06em}
@@ -31,10 +58,12 @@ main{display:grid;grid-template-columns:minmax(0,1.62fr) minmax(320px,1fr);gap:1
 .frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#0B0F10}
 .frame.black::after{content:"BLACK";position:absolute;inset:0;background:#000;color:var(--mute);display:flex;align-items:center;justify-content:center;letter-spacing:.3em;font-size:12px}
 .right{display:grid;grid-template-rows:auto 1fr;gap:12px;min-height:0}
+.lab .src{cursor:pointer}
+.lab .src:hover{color:var(--y)}
 #notes{flex:1;min-height:0;overflow:auto;background:var(--g1);border:1px solid var(--g3);border-radius:8px;padding:16px 18px;font-size:19px;line-height:1.5;white-space:pre-wrap;outline:none}
 #notes:focus{border-color:var(--y)}
 #notes:empty::before{content:"No notes for this frame — click to type. Saved on this Mac.";color:var(--mute)}
-footer{display:flex;align-items:center;gap:22px;padding:0 20px;background:var(--g1);border-top:1px solid var(--g3);font-size:12px;color:var(--dim);white-space:nowrap;overflow:hidden}
+footer{display:flex;flex-wrap:wrap;align-items:center;gap:6px 22px;padding:8px 20px;background:var(--g1);border-top:1px solid var(--g3);font-size:12px;color:var(--dim);white-space:nowrap}
 footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;padding:1px 6px;color:var(--ink);font:600 11px/1.6 inherit;margin-right:4px}
 #audstate{font-size:12px;color:var(--mute)}
 #audstate.ok{color:#7CC48F}
@@ -52,17 +81,21 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
     <div class="title">Better One, or Two? <small>presenter</small></div>
     <span id="audstate">audience window: not open</span>
     <div class="sp"></div>
-    <div class="stat"><b id="counter">Slide 1 / 54</b><span id="label">—</span></div>
-    <div class="stat"><b id="elapsed">00:00</b><span>in talk</span></div>
-    <div class="stat cd off"><b id="cd">15:00</b><span>timer · click to edit</span></div>
-    <div class="stat"><b id="clock">--:--</b><span>clock</span></div>
-    <button id="btnAud" class="y">Open audience window</button>
-    <button id="btnBlack">Black<kbd>B</kbd></button>
-    <button id="btnMute">Mute<kbd>M</kbd></button>
-    <button id="btnTimer">Timer<kbd>t</kbd></button>
+    <div class="stats">
+      <div class="stat"><b id="counter">Slide 1 / 54</b><span id="label">—</span></div>
+      <div class="stat click" id="talk" title="Click to reset the talk clock to 00:00 (E)"><b id="elapsed">00:00</b><span>in talk · click to reset</span></div>
+      <div class="stat cd off"><b id="cd">15:00</b><span>timer · click to edit</span></div>
+      <div class="stat"><b id="clock">--:--</b><span>clock</span></div>
+    </div>
+    <div class="btns">
+      <button id="btnAud" class="y">Open audience window</button>
+      <button id="btnBlack">Black<kbd>B</kbd></button>
+      <button id="btnMute">Mute<kbd>M</kbd></button>
+      <button id="btnTimer">Timer<kbd>t</kbd></button>
+    </div>
   </header>
   <main>
-    <div class="pane">
+    <div class="pane now">
       <div class="lab"><span>Presenting</span><b id="nowLabel"></b></div>
       <div class="frame" id="nowFrame"><iframe id="mirror" title="current slide"></iframe></div>
     </div>
@@ -72,13 +105,13 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
         <div class="frame"><iframe id="next" title="next slide"></iframe></div>
       </div>
       <div class="pane">
-        <div class="lab"><span>Notes</span><span id="notesSrc"></span></div>
+        <div class="lab"><span>Notes</span><span id="notesSrc" class="src" title="Click to go back to the notes.js text"></span></div>
         <div id="notes" contenteditable="true" spellcheck="false"></div>
       </div>
     </div>
   </main>
   <footer>
-    <span><kbd>→</kbd><kbd>space</kbd> next</span><span><kbd>←</kbd> back</span><span><kbd>B</kbd> black</span><span><kbd>M</kbd> mute clicks</span><span><kbd>t</kbd> timer</span><span><kbd>⇧T</kbd> reset timer</span><span><kbd>+</kbd><kbd>−</kbd> ±1 min · click the time to type one</span><span><kbd>Home</kbd> first</span><span><kbd>S</kbd> test click on TV</span><span>Sound plays in the audience window only.</span>
+    <span><kbd>→</kbd><kbd>space</kbd> next</span><span><kbd>←</kbd> back</span><span><kbd>B</kbd> black</span><span><kbd>M</kbd> mute clicks</span><span><kbd>t</kbd> timer</span><span><kbd>⇧T</kbd> reset timer</span><span><kbd>E</kbd> reset talk clock</span><span><kbd>+</kbd><kbd>−</kbd> ±1 min · click the time to type one</span><span><kbd>Home</kbd> first</span><span><kbd>S</kbd> test click on TV</span><span>Sound plays in the audience window only.</span>
   </footer>
 </div>
 <div id="start">
@@ -122,6 +155,14 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
   }
   notesEl.addEventListener('input', () => { try { localStorage.setItem(key(D.labels[cur]), notesEl.textContent); $('#notesSrc').textContent = 'edited here'; } catch (e) {} });
   notesEl.addEventListener('keydown', e => e.stopPropagation()); // typing in notes must not drive the deck
+  $('#notesSrc').addEventListener('click', () => {            // "edited here" -> drop the local copy, show the file's notes
+    try { localStorage.removeItem(key(D.labels[cur])); } catch (e) {}
+    loadNotes(D.labels[cur]);
+  });
+
+  /* talk clock — starts on the first advance, resets on click or E */
+  function resetTalk() { startedAt = null; $('#elapsed').textContent = '00:00'; }
+  $('#talk').addEventListener('click', resetTalk);
 
   function paint() {
     $('#counter').textContent = `Slide ${cur + 1} / ${total}`;
@@ -221,6 +262,7 @@ footer kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;pad
       case '-': case '_': timerCmd('minus'); break;
       case 'f': case 'F': { const el = document.documentElement; document.fullscreenElement ? document.exitFullscreen() : (el.requestFullscreen && el.requestFullscreen()); break; }
       case 's': case 'S': post(audWin(), { type: 'testclick' }); break;
+      case 'e': case 'E': resetTalk(); break;
       case 'Escape': if (black) toggleBlack(); break;
     }
   });
