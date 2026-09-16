@@ -12,7 +12,11 @@ The presenter shows: what the room sees (live, with the animations), your notes,
 
 The audience window shows the slide and nothing else. Before you start it may warn you that sound isn't armed or that it isn't filling the screen; both disappear once you click inside it and it goes full-screen.
 
-**Notes** — your Craft outline, one entry per frame, lives in `notes.js`. Click the notes box to type over it for that frame (saved on this Mac only; the label turns to *edited here*). Click *edited here* to go back to the file's text.
+**Notes** — your Craft outline, one entry per frame, lives in `notes.js`. Click the notes box and type to override it for that frame.
+
+*Where your typing goes:* it saves into this browser the moment you stop typing (the label reads **edited here · saved**) and always beats `notes.js`, so it survives reloads, new builds and pushes. What it does **not** survive: a different browser, another Mac, or switching between the local file and the hosted link — those are separate stores. Press **Save notes** in the header to download a `notes.js` containing every note with your edits merged in; drop that file in the deck folder (replacing the old one) and your edits are permanent everywhere.
+
+To undo an edit on one slide, click **revert** next to the label — it asks first.
 
 **If the presenter window ever reloads or crashes:** reopen `presenter.html`. It finds the audience window on its own within two seconds — the TV never goes dark.
 

@@ -42,7 +42,12 @@ main{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);gap:14
 .pane{display:flex;flex-direction:column;min-height:0;gap:7px}
 .lab{font-size:10px;color:var(--mute);text-transform:uppercase;letter-spacing:.14em;display:flex;justify-content:space-between;align-items:baseline}
 .lab b{color:var(--y);letter-spacing:.06em}
-.lab .src{cursor:pointer}.lab .src:hover{color:var(--y)}
+.lab .src{color:var(--mute)}
+.lab .src.edited{color:var(--y)}
+.lab .revert{margin-left:10px;cursor:pointer;color:var(--mute);text-decoration:underline;text-underline-offset:2px}
+.lab .revert:hover{color:#F0908A}
+#save.dirty{background:rgba(242,194,27,.16);border-color:var(--y);color:var(--y)}
+#save.saved{background:rgba(63,164,95,.16);border-color:var(--ok);color:#7CC48F}
 .frame{position:relative;width:100%;aspect-ratio:16/9;background:#000;border:1px solid var(--g3);border-radius:8px;overflow:hidden}
 .frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#0B0F10}
 .frame.black::after{content:"BLACK";position:absolute;inset:0;background:#000;color:var(--mute);display:flex;align-items:center;justify-content:center;letter-spacing:.3em;font-size:12px}
@@ -108,6 +113,7 @@ kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;padding:1p
       <button id="btnBlack">Black<kbd>B</kbd></button>
       <button id="btnMute">Mute<kbd>M</kbd></button>
       <button id="btnTimer">Timer<kbd>t</kbd></button>
+      <button id="save" title="Write every note to a notes.js file you can drop in the deck folder">Save notes</button>
       <button id="btnKeys">Keys<kbd>?</kbd></button>
     </div>
   </header>
@@ -118,7 +124,7 @@ kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;padding:1p
     </div>
     <div class="pane right">
       <div class="pane">
-        <div class="lab"><span>Notes</span><span id="notesSrc" class="src" title="Click to go back to the notes.js text"></span></div>
+        <div class="lab"><span>Notes</span><span><span id="notesSrc" class="src"></span><span id="revert" class="revert" hidden>revert</span></span></div>
         <div id="notes" contenteditable="true" spellcheck="false"></div>
       </div>
       <div class="pane next-pane">
@@ -147,6 +153,7 @@ kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;padding:1p
       <tr><td><kbd>S</kbd></td><td>test the click sound on the TV</td></tr>
       <tr><td>Timeline</td><td>click any slide below to jump straight to it</td></tr>
       <tr><td>Sound</td><td>plays in the audience window only</td></tr>
+      <tr><td>Your notes</td><td>typing in the notes box saves in this browser instantly and always beats notes.js — it survives reloads and new builds, but not a different browser, another Mac, or the switch between the local file and the hosted link. <b>Save notes</b> writes a notes.js you can drop in the deck folder to make them permanent everywhere.</td></tr>
     </table>
     <button class="close" id="keysClose">Close</button>
   </div>
@@ -204,18 +211,63 @@ kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;padding:1p
   }
 
   /* ---------- notes ---------- */
+  /* Notes. What you type is kept in this browser under bo2.notes.<label> and always wins over
+     notes.js. It survives reloads and new deck builds. It does NOT travel between file:// and the
+     hosted URL, or to another Mac — "Save notes" writes a notes.js you can drop in the deck folder
+     to make edits permanent everywhere. */
   const notesEl = $('#notes');
   const key = l => 'bo2.notes.' + l;
-  function loadNotes(label) {
-    let saved = null; try { saved = localStorage.getItem(key(label)); } catch (e) {}
-    notesEl.textContent = saved != null ? saved : (D.notes[label] || '');
-    $('#notesSrc').textContent = saved != null ? 'edited here' : (D.notes[label] ? 'from notes.js' : '');
+  const ls = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+               set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+               del(k) { try { localStorage.removeItem(k); } catch (e) {} } };
+  const editedCount = () => D.labels.filter(l => ls.get(key(l)) != null).length;
+  let saveTimer = null;
+
+  function stamp(txt, edited) {
+    const el = $('#notesSrc');
+    el.textContent = txt; el.classList.toggle('edited', !!edited);
+    $('#revert').hidden = !edited;
   }
-  notesEl.addEventListener('input', () => { try { localStorage.setItem(key(D.labels[cur]), notesEl.textContent); $('#notesSrc').textContent = 'edited here'; } catch (e) {} });
+  function loadNotes(label) {
+    const saved = ls.get(key(label));
+    notesEl.textContent = saved != null ? saved : (D.notes[label] || '');
+    stamp(saved != null ? 'edited here' : (D.notes[label] ? 'from notes.js' : ''), saved != null);
+  }
+  notesEl.addEventListener('input', () => {
+    const ok = ls.set(key(D.labels[cur]), notesEl.textContent);
+    stamp(ok ? 'edited here · saving…' : 'NOT SAVED — this browser is blocking storage', true);
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => { if (ok) stamp('edited here · saved', true); markDirty(); }, 400);
+  });
   notesEl.addEventListener('keydown', e => e.stopPropagation()); // typing in notes must not drive the deck
-  $('#notesSrc').addEventListener('click', () => {
-    try { localStorage.removeItem(key(D.labels[cur])); } catch (e) {}
-    loadNotes(D.labels[cur]);
+  $('#revert').addEventListener('click', () => {
+    const label = D.labels[cur];
+    const before = ls.get(key(label));
+    if (before == null) return;
+    if (!confirm('Throw away your edit for slide ' + (cur + 1) + ' and go back to the notes.js text?\n\nThis cannot be undone.')) return;
+    ls.del(key(label)); loadNotes(label); markDirty();
+  });
+
+  /* Save notes -> a notes.js file: your edits merged over the defaults, for every slide */
+  function markDirty() {
+    const n = editedCount(), b = $('#save');
+    b.classList.toggle('dirty', n > 0); b.classList.remove('saved');
+    b.textContent = n > 0 ? `Save notes (${n})` : 'Save notes';
+    b.title = n > 0 ? `${n} slide${n === 1 ? '' : 's'} edited in this browser. Click to write a notes.js you can drop in the deck folder.`
+                    : 'Write a notes.js file from the current notes.';
+  }
+  $('#save').addEventListener('click', () => {
+    const notes = {};
+    D.labels.forEach(l => { const v = ls.get(key(l)); notes[l] = v != null ? v : (D.notes[l] || ''); });
+    const body = '// Speaker notes for presenter.html — exported from the presenter ' + new Date().toISOString().slice(0, 16).replace('T', ' ') + '.\n'
+               + '// Drop this in the deck folder next to presenter.html to make these permanent.\n'
+               + 'window.DECK = ' + JSON.stringify({ labels: D.labels, notes }, null, 2) + ';\n';
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([body], { type: 'text/javascript' }));
+    a.download = 'notes.js'; document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    const b = $('#save'); b.classList.remove('dirty'); b.classList.add('saved'); b.textContent = 'Saved to file';
+    setTimeout(markDirty, 2600);
   });
 
   /* talk clock — starts on the first advance, resets on click or E */
@@ -341,7 +393,7 @@ kbd{background:var(--g2);border:1px solid var(--g3);border-radius:4px;padding:1p
   setInterval(() => {
     if (startedAt != null) { const s = Math.floor((Date.now() - startedAt) / 1000); $('#elapsed').textContent = fmt(s); }
   }, 1000);
-  setAud(false); paint(); bcastTimer();
+  setAud(false); paint(); bcastTimer(); markDirty();
 })();
 </script>
 </body>
